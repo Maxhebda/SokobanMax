@@ -2,6 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <board.h>
+#include <onecell.h>
+#include <QtGui>
+#include <QtCore>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -14,8 +18,12 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void showBoard();
 
 private:
     Ui::MainWindow *ui;
+    Board myBoard;
+protected:
+    void paintEvent(QPaintEvent *);
 };
 #endif // MAINWINDOW_H
