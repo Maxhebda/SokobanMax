@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/arrorRight.png</file>
+        <file>img/arrowDown.png</file>
+        <file>img/arrowLeft.png</file>
+        <file>img/arrowUp.png</file>
+        <file>img/diamond.png</file>
+        <file>img/diamondHole.png</file>
+        <file>img/door.png</file>
+        <file>img/hole.png</file>
+        <file>img/steve.png</file>
+        <file>img/wall.png</file>
+    </qresource>
+</RCC>
