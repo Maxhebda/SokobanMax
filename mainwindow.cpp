@@ -1,27 +1,36 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QImage>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    // --------------------------- basic bacgroud --------------------
+    image = new QImage(15*48,13*48,QImage::Format_RGB32);
+    image->fill(QColor(230,230,255));
+    paintOnImage = new QPainter;
+    paintOnImage->begin(image);
+    // --------------------------- basic bacgroud --------------------
+
+    connect(ui->actionStart,SIGNAL(triggered()),this,SLOT(clickStart()));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    paintOnImage->end();
+    delete image;
+    delete paintOnImage;
 }
 
 void MainWindow::paintEvent(QPaintEvent *e)
 {
-    QRectF target(10, 10 + ui->menubar->height(), ui->centralwidget->geometry().width()-30, ui->centralwidget->geometry().height()-30);
-    QRectF source(0, 0, 23, 23);
-    QImage image(":/img/wall.png");
-
-    QPainter painter(this);
-    painter.drawImage(target, image, source);
-
+    QPainter painter;
+    painter.begin(this);
+    painter.drawImage(10,10 + ui->menubar->height(),*image);
+    painter.end();
 }
 
 void MainWindow::showBoard()
@@ -44,4 +53,10 @@ void MainWindow::showBoard()
             }
         }
     }
+}
+
+void MainWindow::clickStart()
+{
+    paintOnImage->drawLine(10,10,30,30);
+    repaint();
 }

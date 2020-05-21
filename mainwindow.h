@@ -6,6 +6,7 @@
 #include <onecell.h>
 #include <QtGui>
 #include <QtCore>
+#include <QImage>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,7 +24,11 @@ public:
 private:
     Ui::MainWindow *ui;
     Board myBoard;
+    QImage * image;
+    QPainter * paintOnImage;
 protected:
     void paintEvent(QPaintEvent *);
+private slots:
+    void clickStart();
 };
 #endif // MAINWINDOW_H
