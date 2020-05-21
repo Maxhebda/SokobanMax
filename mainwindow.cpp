@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     // --------------------------- basic bacgroud --------------------
     image = new QImage(15*48,13*48,QImage::Format_RGB32);
-    image->fill(QColor(230,230,255));
+    image->fill(QColor(160,160,160));
     paintOnImage = new QPainter;
     paintOnImage->begin(image);
     // --------------------------- basic bacgroud --------------------
@@ -35,6 +35,9 @@ void MainWindow::paintEvent(QPaintEvent *e)
 
 void MainWindow::showBoard()
 {
+
+    QRectF source(0, 0, 47, 47);
+
     for (unsigned short int y=0; y<13; y++)
     {
         for (unsigned short int x=0; x<15; x++)
@@ -47,16 +50,63 @@ void MainWindow::showBoard()
                 }
                 case OneCell::CELL_WALL:
                 {
-
+                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/wall.png"),source);
+                    break;
+                }
+                case OneCell::CELL_DOOR:
+                {
+                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/door.png"),source);
+                    break;
+                }
+                case OneCell::CELL_STEVE:
+                {
+                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/steve.png"),source);
+                    break;
+                }
+                case OneCell::CELL_HOLE:
+                {
+                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/hole.png"),source);
+                    break;
+                }
+                case OneCell::CELL_DIAMOND:
+                {
+                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/diamond.png"),source);
+                    break;
+                }
+                case OneCell::CELL_DIAMONDinHOLE:
+                {
+                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/diamondHole.png"),source);
+                    break;
+                }
+                case OneCell::CELL_ARROW_UP:
+                {
+                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/arrowUP.png"),source);
+                    break;
+                }
+                case OneCell::CELL_ARROW_DOWN:
+                {
+                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/arrowDown.png"),source);
+                    break;
+                }
+                case OneCell::CELL_ARROW_LEFT:
+                {
+                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/arrowLeft.png"),source);
+                    break;
+                }
+                case OneCell::CELL_ARROW_RIGHT:
+                {
+                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/arrorRight.png"),source);
                     break;
                 }
             }
         }
     }
+    repaint();
 }
 
 void MainWindow::clickStart()
 {
-    paintOnImage->drawLine(10,10,30,30);
+    myBoard.load();
+    showBoard();
     repaint();
 }
