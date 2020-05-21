@@ -9,12 +9,19 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     // --------------------------- basic bacgroud --------------------
     image = new QImage(15*48,13*48,QImage::Format_RGB32);
-    image->fill(QColor(160,160,160));
+    image->fill(QColor(180,180,170));
     paintOnImage = new QPainter;
     paintOnImage->begin(image);
-    // --------------------------- basic bacgroud --------------------
+
+    // ------------------------ shortcut keyboard --------------------
+    shUP    = new QShortcut(QKeySequence(Qt::Key_Up),this,SLOT(clickUP()));
+    shDOWN  = new QShortcut(QKeySequence(Qt::Key_Down),this,SLOT(clickDOWN()));
+    shRIGHT    = new QShortcut(QKeySequence(Qt::Key_Right),this,SLOT(clickRIGHT()));
+    shLEFT  = new QShortcut(QKeySequence(Qt::Key_Left),this,SLOT(clickLEFT()));
 
     connect(ui->actionStart,SIGNAL(triggered()),this,SLOT(clickStart()));
+    myBoard.load();
+    showBoard();
 }
 
 MainWindow::~MainWindow()
@@ -35,9 +42,8 @@ void MainWindow::paintEvent(QPaintEvent *e)
 
 void MainWindow::showBoard()
 {
-
+    paintOnImage->fillRect(QRect(0,0,15*48,13*48),QColor(180,180,170));
     QRectF source(0, 0, 47, 47);
-
     for (unsigned short int y=0; y<13; y++)
     {
         for (unsigned short int x=0; x<15; x++)
@@ -45,57 +51,56 @@ void MainWindow::showBoard()
             switch (myBoard.get(y,x)) {
                 case OneCell::CELL_EMPTY:
                 {
-
                     break;
                 }
                 case OneCell::CELL_WALL:
                 {
-                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/wall.png"),source);
+                    paintOnImage->drawImage(QRectF(x*48,y*48,48,48),QImage(":/img/wall.png"),source);
                     break;
                 }
                 case OneCell::CELL_DOOR:
                 {
-                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/door.png"),source);
+                    paintOnImage->drawImage(QRectF(x*48,y*48,48,48),QImage(":/img/door.png"),source);
                     break;
                 }
                 case OneCell::CELL_STEVE:
                 {
-                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/steve.png"),source);
+                    paintOnImage->drawImage(QRectF(x*48,y*48,48,48),QImage(":/img/steve.png"),source);
                     break;
                 }
                 case OneCell::CELL_HOLE:
                 {
-                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/hole.png"),source);
+                    paintOnImage->drawImage(QRectF(x*48,y*48,48,48),QImage(":/img/hole.png"),source);
                     break;
                 }
                 case OneCell::CELL_DIAMOND:
                 {
-                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/diamond.png"),source);
+                    paintOnImage->drawImage(QRectF(x*48,y*48,48,48),QImage(":/img/diamond.png"),source);
                     break;
                 }
                 case OneCell::CELL_DIAMONDinHOLE:
                 {
-                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/diamondHole.png"),source);
+                    paintOnImage->drawImage(QRectF(x*48,y*48,48,48),QImage(":/img/diamondHole.png"),source);
                     break;
                 }
                 case OneCell::CELL_ARROW_UP:
                 {
-                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/arrowUP.png"),source);
+                    paintOnImage->drawImage(QRectF(x*48,y*48,48,48),QImage(":/img/arrowUP.png"),source);
                     break;
                 }
                 case OneCell::CELL_ARROW_DOWN:
                 {
-                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/arrowDown.png"),source);
+                    paintOnImage->drawImage(QRectF(x*48,y*48,48,48),QImage(":/img/arrowDown.png"),source);
                     break;
                 }
                 case OneCell::CELL_ARROW_LEFT:
                 {
-                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/arrowLeft.png"),source);
+                    paintOnImage->drawImage(QRectF(x*48,y*48,48,48),QImage(":/img/arrowLeft.png"),source);
                     break;
                 }
                 case OneCell::CELL_ARROW_RIGHT:
                 {
-                    paintOnImage->drawImage(QRectF(10+x*48,10 + ui->menubar->height()+y*48,48,48),QImage(":/img/arrorRight.png"),source);
+                    paintOnImage->drawImage(QRectF(x*48,y*48,48,48),QImage(":/img/arrorRight.png"),source);
                     break;
                 }
             }
@@ -109,4 +114,100 @@ void MainWindow::clickStart()
     myBoard.load();
     showBoard();
     repaint();
+}
+
+void MainWindow::clickUP()
+{
+    unsigned short int steveX = myBoard.pos_Steve_x;
+    unsigned short int steveY = myBoard.pos_Steve_y;
+    if (steveY>0)
+    {
+        if (myBoard.get(steveY-1,steveX)==OneCell::CELL_EMPTY)
+        {
+             myBoard.set(steveY-1,steveX,OneCell::CELL_STEVE);
+             myBoard.set(steveY,steveX,OneCell::CELL_EMPTY);
+        }else
+            if (steveY>1)
+            {
+                if (myBoard.get(steveY-1,steveX)==OneCell::CELL_DIAMOND && myBoard.get(steveY-2,steveX)==OneCell::CELL_EMPTY)
+                {
+                    myBoard.set(steveY-2,steveX,OneCell::CELL_DIAMOND);
+                    myBoard.set(steveY-1,steveX,OneCell::CELL_STEVE);
+                    myBoard.set(steveY,steveX,OneCell::CELL_EMPTY);
+                }
+            }
+   }
+   showBoard();
+}
+
+void MainWindow::clickDOWN()
+{
+    unsigned short int steveX = myBoard.pos_Steve_x;
+    unsigned short int steveY = myBoard.pos_Steve_y;
+    if (steveY<12)
+    {
+        if (myBoard.get(steveY+1,steveX)==OneCell::CELL_EMPTY)
+        {
+             myBoard.set(steveY+1,steveX,OneCell::CELL_STEVE);
+             myBoard.set(steveY,steveX,OneCell::CELL_EMPTY);
+        }else
+            if (steveY<11)
+            {
+                if (myBoard.get(steveY+1,steveX)==OneCell::CELL_DIAMOND && myBoard.get(steveY+2,steveX)==OneCell::CELL_EMPTY)
+                {
+                    myBoard.set(steveY+2,steveX,OneCell::CELL_DIAMOND);
+                    myBoard.set(steveY+1,steveX,OneCell::CELL_STEVE);
+                    myBoard.set(steveY,steveX,OneCell::CELL_EMPTY);
+                }
+            }
+   }
+   showBoard();
+}
+
+void MainWindow::clickLEFT()
+{
+    unsigned short int steveX = myBoard.pos_Steve_x;
+    unsigned short int steveY = myBoard.pos_Steve_y;
+    if (steveX>0)
+    {
+        if (myBoard.get(steveY,steveX-1)==OneCell::CELL_EMPTY)
+        {
+             myBoard.set(steveY,steveX-1,OneCell::CELL_STEVE);
+             myBoard.set(steveY,steveX,OneCell::CELL_EMPTY);
+        }else
+            if (steveX>1)
+            {
+                if (myBoard.get(steveY,steveX-1)==OneCell::CELL_DIAMOND && myBoard.get(steveY,steveX-2)==OneCell::CELL_EMPTY)
+                {
+                    myBoard.set(steveY,steveX-2,OneCell::CELL_DIAMOND);
+                    myBoard.set(steveY,steveX-1,OneCell::CELL_STEVE);
+                    myBoard.set(steveY,steveX,OneCell::CELL_EMPTY);
+                }
+            }
+   }
+   showBoard();
+}
+
+void MainWindow::clickRIGHT()
+{
+    unsigned short int steveX = myBoard.pos_Steve_x;
+    unsigned short int steveY = myBoard.pos_Steve_y;
+    if (steveX<14)
+    {
+        if (myBoard.get(steveY,steveX+1)==OneCell::CELL_EMPTY)
+        {
+             myBoard.set(steveY,steveX+1,OneCell::CELL_STEVE);
+             myBoard.set(steveY,steveX,OneCell::CELL_EMPTY);
+        }else
+            if (steveX<13)
+            {
+                if (myBoard.get(steveY,steveX+1)==OneCell::CELL_DIAMOND && myBoard.get(steveY,steveX+2)==OneCell::CELL_EMPTY)
+                {
+                    myBoard.set(steveY,steveX+2,OneCell::CELL_DIAMOND);
+                    myBoard.set(steveY,steveX+1,OneCell::CELL_STEVE);
+                    myBoard.set(steveY,steveX,OneCell::CELL_EMPTY);
+                }
+            }
+   }
+   showBoard();
 }
