@@ -10,5 +10,6 @@
         <file>img/hole.png</file>
         <file>img/steve.png</file>
         <file>img/wall.png</file>
+        <file>img/steveHole.png</file>
     </qresource>
 </RCC>

@@ -43,9 +43,9 @@ void Board::load()
         0, 2, 5, 5, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0,
         0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,10,
         0, 0, 0, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 5, 5, 0, 0, 0, 0, 0, 0, 3, 5, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 0, 0,
+        0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0,
+        0, 0, 0, 5, 5, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0,
         5,10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5
     };
@@ -55,7 +55,7 @@ void Board::load()
         for (unsigned short int x=0; x<15; x++)
         {
             myBoard[y][x].set(tmp[15*y+x]);
-            if (tmp[15*y+x]==OneCell::CELL_STEVE)
+            if (tmp[15*y+x]==OneCell::CELL_STEVE || tmp[15*y+x]==OneCell::CELL_STEVEinHOLE)
             {
                 pos_Steve_x=x;
                 pos_Steve_y=y;
@@ -100,7 +100,7 @@ unsigned short int Board::get(unsigned short int y, unsigned short int x)
 void Board::set(unsigned short y, unsigned short x, unsigned short a)
 {
     myBoard[y][x].set(a);
-    if (a==OneCell::CELL_STEVE)
+    if (a==OneCell::CELL_STEVE || a==OneCell::CELL_STEVEinHOLE)
     {
         pos_Steve_x=x;
         pos_Steve_y=y;
