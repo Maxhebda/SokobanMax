@@ -143,12 +143,19 @@ void MainWindow::clickDOWN()
              myBoard.set(steveY,steveX,(myBoard.get(steveY,steveX)==OneCell::CELL_STEVE)?OneCell::CELL_EMPTY:OneCell::CELL_HOLE);
              myBoard.set(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x,OneCell::CELL_STEVE);
         }
-        //steve and diamodn and empty
-        if (steveY<=10 && myBoard.get(steveY+1,steveX)==OneCell::CELL_DIAMOND && myBoard.get(steveY+2,steveX)==OneCell::CELL_EMPTY)
+        //*steve and diamodn and empty
+        if (steveY<=10 && (myBoard.get(steveY+1,steveX)==OneCell::CELL_DIAMOND || myBoard.get(steveY+1,steveX)==OneCell::CELL_DIAMONDinHOLE) && myBoard.get(steveY+2,steveX)==OneCell::CELL_EMPTY)
         {
              myBoard.set(steveY,steveX,(myBoard.get(steveY,steveX)==OneCell::CELL_STEVE)?OneCell::CELL_EMPTY:OneCell::CELL_HOLE);
              myBoard.set(steveY+2,steveX,OneCell::CELL_DIAMOND);
-             myBoard.set(steveY+1,steveX,OneCell::CELL_STEVE);
+             myBoard.set(steveY+1,steveX,(myBoard.get(steveY+1,steveX)==OneCell::CELL_DIAMOND)?OneCell::CELL_STEVE:OneCell::CELL_STEVEinHOLE);
+        }
+        //*steve and diamodn/diamondHole and hole
+        if (steveY<=10 && (myBoard.get(steveY+1,steveX)==OneCell::CELL_DIAMOND || myBoard.get(steveY+1,steveX)==OneCell::CELL_DIAMONDinHOLE) && myBoard.get(steveY+2,steveX)==OneCell::CELL_HOLE)
+        {
+             myBoard.set(steveY,steveX,(myBoard.get(steveY,steveX)==OneCell::CELL_STEVE)?OneCell::CELL_EMPTY:OneCell::CELL_HOLE);
+             myBoard.set(steveY+2,steveX,OneCell::CELL_DIAMONDinHOLE);
+             myBoard.set(steveY+1,steveX,(myBoard.get(steveY+1,steveX)==OneCell::CELL_DIAMOND)?OneCell::CELL_STEVE:OneCell::CELL_STEVEinHOLE);
         }
         //steve and diamond and door and teleport=empty
         if (steveY<=10 && myBoard.get(steveY+1,steveX)==OneCell::CELL_DIAMOND && myBoard.get(steveY+2,steveX)==OneCell::CELL_DOOR && myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_EMPTY)
