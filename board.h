@@ -15,7 +15,8 @@ public:
     unsigned short int pos_Teleport_x;      //teleportation position near the arrow
     unsigned short int pos_Teleport_y;
     unsigned short int pos_Teleport_x_next; //teleportation position far the arrow
-    unsigned short int pos_Teleport_y_next;
+    unsigned short int pos_Teleport_y_next;   
+    bool isWin();                           //we check if we won
 private:
     OneCell myBoard[13][15];                            // y=13 x=15
 };

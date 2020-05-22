@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QImage>
+#include <QFont>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -111,6 +112,14 @@ void MainWindow::showBoard()
             }
         }
     }
+    if (myBoard.isWin())
+    {
+        QFont font;
+        font.setPixelSize(30);
+        font.setBold(true);
+        paintOnImage->setFont(font);
+        paintOnImage->drawText(280,310,"Gratulacje!");
+    }
     repaint();
 }
 
@@ -123,6 +132,7 @@ void MainWindow::clickStart()
 
 void MainWindow::clickDOWN()
 {
+    if (myBoard.isWin()) return;
     unsigned short int steveX = myBoard.pos_Steve_x;
     unsigned short int steveY = myBoard.pos_Steve_y;
         //steve and empty
@@ -157,25 +167,26 @@ void MainWindow::clickDOWN()
              myBoard.set(steveY+2,steveX,OneCell::CELL_DIAMONDinHOLE);
              myBoard.set(steveY+1,steveX,(myBoard.get(steveY+1,steveX)==OneCell::CELL_DIAMOND)?OneCell::CELL_STEVE:OneCell::CELL_STEVEinHOLE);
         }
-        //*steve and diamond/diamondHole and door and teleport=empty/hole
+        //steve and diamond/diamondHole and door and teleport=empty/hole
         else if ((myBoard.get(steveY+1,steveX)==OneCell::CELL_DIAMOND || myBoard.get(steveY+1,steveX)==OneCell::CELL_DIAMONDinHOLE) && myBoard.get(steveY+2,steveX)==OneCell::CELL_DOOR && (myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_EMPTY || myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_HOLE))
         {
              myBoard.set(steveY,steveX,(myBoard.get(steveY,steveX)==OneCell::CELL_STEVE)?OneCell::CELL_EMPTY:OneCell::CELL_HOLE);
              myBoard.set(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x,(myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_EMPTY)?OneCell::CELL_DIAMOND:OneCell::CELL_DIAMONDinHOLE);
              myBoard.set(steveY+1,steveX,(myBoard.get(steveY+1,steveX)==OneCell::CELL_DIAMOND)?OneCell::CELL_STEVE:OneCell::CELL_STEVEinHOLE);
         }
-        //steve and door and teleport=diamond and empty
-        else if (myBoard.get(steveY+1,steveX)==OneCell::CELL_DOOR && myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_DIAMOND && myBoard.get(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next)==OneCell::CELL_EMPTY)
+        //steve and door and teleport=diamond/diamondHole and empty/hole
+        else if (myBoard.get(steveY+1,steveX)==OneCell::CELL_DOOR && (myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_DIAMOND || myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_DIAMONDinHOLE) && (myBoard.get(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next)==OneCell::CELL_EMPTY || myBoard.get(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next)==OneCell::CELL_HOLE))
         {
              myBoard.set(steveY,steveX,(myBoard.get(steveY,steveX)==OneCell::CELL_STEVE)?OneCell::CELL_EMPTY:OneCell::CELL_HOLE);
-             myBoard.set(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next,OneCell::CELL_DIAMOND);
-             myBoard.set(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x,OneCell::CELL_STEVE);
+             myBoard.set(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next,(myBoard.get(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next)==OneCell::CELL_EMPTY)?OneCell::CELL_DIAMOND:OneCell::CELL_DIAMONDinHOLE);
+             myBoard.set(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x,(myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_DIAMOND)?OneCell::CELL_STEVE:OneCell::CELL_STEVEinHOLE);
         }
     showBoard();
 }
 
 void MainWindow::clickUP()
 {
+    if (myBoard.isWin()) return;
     unsigned short int steveX = myBoard.pos_Steve_x;
     unsigned short int steveY = myBoard.pos_Steve_y;
         //steve and empty
@@ -217,18 +228,19 @@ void MainWindow::clickUP()
              myBoard.set(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x,(myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_EMPTY)?OneCell::CELL_DIAMOND:OneCell::CELL_DIAMONDinHOLE);
              myBoard.set(steveY-1,steveX,(myBoard.get(steveY-1,steveX)==OneCell::CELL_DIAMOND)?OneCell::CELL_STEVE:OneCell::CELL_STEVEinHOLE);
         }
-        //steve and door and teleport=diamond and empty
-        else if (myBoard.get(steveY-1,steveX)==OneCell::CELL_DOOR && myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_DIAMOND && myBoard.get(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next)==OneCell::CELL_EMPTY)
+        //steve and door and teleport=diamond/diamondHole and empty/hole
+        else if (myBoard.get(steveY-1,steveX)==OneCell::CELL_DOOR && (myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_DIAMOND || myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_DIAMONDinHOLE) && (myBoard.get(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next)==OneCell::CELL_EMPTY || myBoard.get(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next)==OneCell::CELL_HOLE))
         {
              myBoard.set(steveY,steveX,(myBoard.get(steveY,steveX)==OneCell::CELL_STEVE)?OneCell::CELL_EMPTY:OneCell::CELL_HOLE);
-             myBoard.set(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next,OneCell::CELL_DIAMOND);
-             myBoard.set(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x,OneCell::CELL_STEVE);
+             myBoard.set(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next,(myBoard.get(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next)==OneCell::CELL_EMPTY)?OneCell::CELL_DIAMOND:OneCell::CELL_DIAMONDinHOLE);
+             myBoard.set(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x,(myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_DIAMOND)?OneCell::CELL_STEVE:OneCell::CELL_STEVEinHOLE);
         }
     showBoard();
 }
 
 void MainWindow::clickLEFT()
 {
+    if (myBoard.isWin()) return;
     unsigned short int steveX = myBoard.pos_Steve_x;
     unsigned short int steveY = myBoard.pos_Steve_y;
         //steve and empty
@@ -270,18 +282,20 @@ void MainWindow::clickLEFT()
              myBoard.set(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x,(myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_EMPTY)?OneCell::CELL_DIAMOND:OneCell::CELL_DIAMONDinHOLE);
              myBoard.set(steveY,steveX-1,(myBoard.get(steveY,steveX-1)==OneCell::CELL_DIAMOND)?OneCell::CELL_STEVE:OneCell::CELL_STEVEinHOLE);
         }
-        //steve and door and teleport=diamond and empty
-        else if (myBoard.get(steveY,steveX-1)==OneCell::CELL_DOOR && myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_DIAMOND && myBoard.get(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next)==OneCell::CELL_EMPTY)
+        //steve and door and teleport=diamond/diamondHole and empty/hole
+        else if (myBoard.get(steveY,steveX-1)==OneCell::CELL_DOOR && (myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_DIAMOND || myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_DIAMONDinHOLE) && (myBoard.get(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next)==OneCell::CELL_EMPTY || myBoard.get(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next)==OneCell::CELL_HOLE))
         {
              myBoard.set(steveY,steveX,(myBoard.get(steveY,steveX)==OneCell::CELL_STEVE)?OneCell::CELL_EMPTY:OneCell::CELL_HOLE);
-             myBoard.set(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next,OneCell::CELL_DIAMOND);
-             myBoard.set(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x,OneCell::CELL_STEVE);
+             myBoard.set(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next,(myBoard.get(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next)==OneCell::CELL_EMPTY)?OneCell::CELL_DIAMOND:OneCell::CELL_DIAMONDinHOLE);
+             myBoard.set(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x,(myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_DIAMOND)?OneCell::CELL_STEVE:OneCell::CELL_STEVEinHOLE);
         }
     showBoard();
 }
 
 void MainWindow::clickRIGHT()
 {
+    if (myBoard.isWin()) return;
+
     unsigned short int steveX = myBoard.pos_Steve_x;
     unsigned short int steveY = myBoard.pos_Steve_y;
         //steve and empty
@@ -323,12 +337,12 @@ void MainWindow::clickRIGHT()
              myBoard.set(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x,(myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_EMPTY)?OneCell::CELL_DIAMOND:OneCell::CELL_DIAMONDinHOLE);
              myBoard.set(steveY,steveX+1,(myBoard.get(steveY,steveX+1)==OneCell::CELL_DIAMOND)?OneCell::CELL_STEVE:OneCell::CELL_STEVEinHOLE);
         }
-        //steve and door and teleport=diamond and empty
-        else if (myBoard.get(steveY,steveX+1)==OneCell::CELL_DOOR && myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_DIAMOND && myBoard.get(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next)==OneCell::CELL_EMPTY)
+        //steve and door and teleport=diamond/diamondHole and empty/hole
+        else if (myBoard.get(steveY,steveX+1)==OneCell::CELL_DOOR && (myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_DIAMOND || myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_DIAMONDinHOLE) && (myBoard.get(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next)==OneCell::CELL_EMPTY || myBoard.get(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next)==OneCell::CELL_HOLE))
         {
              myBoard.set(steveY,steveX,(myBoard.get(steveY,steveX)==OneCell::CELL_STEVE)?OneCell::CELL_EMPTY:OneCell::CELL_HOLE);
-             myBoard.set(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next,OneCell::CELL_DIAMOND);
-             myBoard.set(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x,OneCell::CELL_STEVE);
+             myBoard.set(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next,(myBoard.get(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next)==OneCell::CELL_EMPTY)?OneCell::CELL_DIAMOND:OneCell::CELL_DIAMONDinHOLE);
+             myBoard.set(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x,(myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_DIAMOND)?OneCell::CELL_STEVE:OneCell::CELL_STEVEinHOLE);
         }
     showBoard();
 }
