@@ -47,7 +47,6 @@
       <property name="title">
        <string>Podstawowe</string>
       </property>
-      <addaction name="actionlevel_01"/>
      </widget>
      <addaction name="menuPodstawowe"/>
     </widget>

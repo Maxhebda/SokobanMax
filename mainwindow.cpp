@@ -20,9 +20,11 @@ MainWindow::MainWindow(QWidget *parent)
     shRIGHT    = new QShortcut(QKeySequence(Qt::Key_Right),this,SLOT(clickRIGHT()));
     shLEFT  = new QShortcut(QKeySequence(Qt::Key_Left),this,SLOT(clickLEFT()));
     shSPACE  = new QShortcut(QKeySequence(Qt::Key_Space),this,SLOT(clickSPACE()));
+
+    // ------------------------ connect menu -------------------------
     connect(ui->actionStart,SIGNAL(triggered()),this,SLOT(clickStart()));
-    numberOfLevel=0;
-    myBoard.load(Levels::basicLevel(numberOfLevel));
+
+    addMenuLevel();
     showBoard();
 }
 
@@ -32,6 +34,28 @@ MainWindow::~MainWindow()
     paintOnImage->end();
     delete image;
     delete paintOnImage;
+    for (unsigned short int i=0;i<LEVEL_BASIC;i++)
+    {
+        delete levelBasicAction[i];
+    }
+}
+
+void MainWindow::addMenuLevel()
+{
+    char tmp[8];
+    for (unsigned short int i=0;i<LEVEL_BASIC;i++)
+    {
+        sprintf(tmp,"Level %d",i);
+        levelBasicAction[i] = new QAction(tmp,this);
+        levelBasicAction[i]->setCheckable(true);
+        sprintf(tmp,"%d",i);
+        levelBasicAction[i]->setObjectName(tmp);
+        ui->menuPodstawowe->addAction(levelBasicAction[i]);
+        connect(levelBasicAction[i],SIGNAL(triggered()),this,SLOT(clickLevelBasic()));
+    }
+    levelBasicAction[0]->setChecked(true);  //selected first level
+    numberOfLevel=0;
+    myBoard.load(Levels::basicLevel(numberOfLevel));
 }
 
 void MainWindow::paintEvent(QPaintEvent *e)
@@ -122,6 +146,21 @@ void MainWindow::showBoard()
         paintOnImage->drawText(280,310,"Gratulacje!");
     }
     repaint();
+}
+
+void MainWindow::clickLevelBasic()
+{
+    numberOfLevel = QVariant(((QAction*)sender())->objectName()).toInt();
+    myBoard.load(Levels::basicLevel(numberOfLevel));
+
+    // checked only active levels
+    for (unsigned short int i=0;i<LEVEL_BASIC;i++)
+    {
+        levelBasicAction[i]->setChecked(false);
+    }
+    levelBasicAction[numberOfLevel]->setChecked(true);
+
+    showBoard();
 }
 
 void MainWindow::clickStart()
@@ -350,7 +389,15 @@ void MainWindow::clickRIGHT()
 void MainWindow::clickSPACE()
 {
     if (!myBoard.isWin()) return;
-    if (numberOfLevel<2) numberOfLevel++;
+    if (numberOfLevel<LEVEL_BASIC-1) numberOfLevel++;
+
+    // checked only active levels
+    for (unsigned short int i=0;i<LEVEL_BASIC;i++)
+    {
+        levelBasicAction[i]->setChecked(false);
+    }
+    levelBasicAction[numberOfLevel]->setChecked(true);
+
     myBoard.load(Levels::basicLevel(numberOfLevel));
     showBoard();
 }

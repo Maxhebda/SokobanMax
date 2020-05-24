@@ -22,6 +22,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void showBoard();
+    void addMenuLevel();
 
 private:
     Ui::MainWindow *ui;
@@ -37,12 +38,17 @@ private:
     QShortcut * shSPACE;
 
     unsigned short int numberOfLevel;
+    static const unsigned short int LEVEL_BASIC=3;                     //number of levels
+    QAction * levelBasicAction[LEVEL_BASIC];
 
 protected:
     void paintEvent(QPaintEvent *);
 
 private slots:
+    //---- menu
     void clickStart();
+    void clickLevelBasic();
+    //---- shortcut
     void clickUP();
     void clickDOWN();
     void clickRIGHT();
