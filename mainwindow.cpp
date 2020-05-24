@@ -19,9 +19,10 @@ MainWindow::MainWindow(QWidget *parent)
     shDOWN  = new QShortcut(QKeySequence(Qt::Key_Down),this,SLOT(clickDOWN()));
     shRIGHT    = new QShortcut(QKeySequence(Qt::Key_Right),this,SLOT(clickRIGHT()));
     shLEFT  = new QShortcut(QKeySequence(Qt::Key_Left),this,SLOT(clickLEFT()));
-
+    shSPACE  = new QShortcut(QKeySequence(Qt::Key_Space),this,SLOT(clickSPACE()));
     connect(ui->actionStart,SIGNAL(triggered()),this,SLOT(clickStart()));
-    myBoard.load();
+    numberOfLevel=0;
+    myBoard.load(Levels::basicLevel(numberOfLevel));
     showBoard();
 }
 
@@ -125,9 +126,8 @@ void MainWindow::showBoard()
 
 void MainWindow::clickStart()
 {
-    myBoard.load();
+    myBoard.load(Levels::basicLevel(numberOfLevel));
     showBoard();
-    repaint();
 }
 
 void MainWindow::clickDOWN()
@@ -344,5 +344,13 @@ void MainWindow::clickRIGHT()
              myBoard.set(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next,(myBoard.get(myBoard.pos_Teleport_y_next,myBoard.pos_Teleport_x_next)==OneCell::CELL_EMPTY)?OneCell::CELL_DIAMOND:OneCell::CELL_DIAMONDinHOLE);
              myBoard.set(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x,(myBoard.get(myBoard.pos_Teleport_y,myBoard.pos_Teleport_x)==OneCell::CELL_DIAMOND)?OneCell::CELL_STEVE:OneCell::CELL_STEVEinHOLE);
         }
+    showBoard();
+}
+
+void MainWindow::clickSPACE()
+{
+    if (!myBoard.isWin()) return;
+    if (numberOfLevel<2) numberOfLevel++;
+    myBoard.load(Levels::basicLevel(numberOfLevel));
     showBoard();
 }

@@ -7,7 +7,7 @@ class Board
 public:
     Board();
     void clear();
-    void load();
+    void load(unsigned short int * levelPointer);  //pointer to levels
     unsigned short int get(unsigned short int y, unsigned short int x);
     void set(unsigned short int y, unsigned short int x,unsigned short int a);
     unsigned short int pos_Steve_x;

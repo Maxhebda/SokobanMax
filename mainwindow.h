@@ -8,6 +8,7 @@
 #include <QtCore>
 #include <QImage>
 #include <QShortcut>
+#include <levels.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -33,6 +34,9 @@ private:
     QShortcut * shDOWN;
     QShortcut * shRIGHT;
     QShortcut * shLEFT;
+    QShortcut * shSPACE;
+
+    unsigned short int numberOfLevel;
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -43,6 +47,6 @@ private slots:
     void clickDOWN();
     void clickRIGHT();
     void clickLEFT();
-
+    void clickSPACE();
 };
 #endif // MAINWINDOW_H

@@ -17,7 +17,7 @@ public:
     static const unsigned short int CELL_ARROW_DOWN = 21;
     static const unsigned short int CELL_ARROW_LEFT = 22;
     static const unsigned short int CELL_ARROW_RIGHT = 23;
-    static const unsigned short int CELL_STEVEinHOLE = 35;
+    static const unsigned short int CELL_STEVEinHOLE = 31;
 
     void set(unsigned short int);
     unsigned short int get();

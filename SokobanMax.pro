@@ -17,12 +17,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     board.cpp \
+    levels.cpp \
     main.cpp \
     mainwindow.cpp \
     onecell.cpp
 
 HEADERS += \
     board.h \
+    levels.h \
     mainwindow.h \
     onecell.h
 
