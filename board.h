@@ -1,13 +1,14 @@
 #ifndef BOARD_H
 #define BOARD_H
 #include <onecell.h>
+#include <QVector>
 
 class Board
 {
 public:
     Board();
     void clear();
-    void load(unsigned short int * levelPointer);  //pointer to levels
+    void load(QVector<unsigned short int> level);  //levels
     unsigned short int get(unsigned short int y, unsigned short int x);
     void set(unsigned short int y, unsigned short int x,unsigned short int a);
     unsigned short int pos_Steve_x;

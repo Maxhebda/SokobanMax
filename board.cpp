@@ -15,40 +15,40 @@ void Board::clear()
         }
     }
 }
-void Board::load(unsigned short int * levelPointer)
+void Board::load(QVector<unsigned short int> level)
 {
     for (unsigned short int y=0; y<13; y++)
     {
         for (unsigned short int x=0; x<15; x++)
         {
-            myBoard[y][x].set(levelPointer[15*y+x]);
-            if (levelPointer[15*y+x]==OneCell::CELL_STEVE || levelPointer[15*y+x]==OneCell::CELL_STEVEinHOLE)
+            myBoard[y][x].set(level[15*y+x]);
+            if (level[15*y+x]==OneCell::CELL_STEVE || level[15*y+x]==OneCell::CELL_STEVEinHOLE)
             {
                 pos_Steve_x=x;
                 pos_Steve_y=y;
             }
-            if (levelPointer[15*y+x]==OneCell::CELL_ARROW_DOWN)
+            if (level[15*y+x]==OneCell::CELL_ARROW_DOWN)
             {
                 pos_Teleport_x=x;
                 pos_Teleport_y=y+1;
                 pos_Teleport_x_next=x;
                 pos_Teleport_y_next=y+2;
             }
-            if (levelPointer[15*y+x]==OneCell::CELL_ARROW_UP)
+            if (level[15*y+x]==OneCell::CELL_ARROW_UP)
             {
                 pos_Teleport_x=x;
                 pos_Teleport_y=y-1;
                 pos_Teleport_x_next=x;
                 pos_Teleport_y_next=y-2;
             }
-            if (levelPointer[15*y+x]==OneCell::CELL_ARROW_RIGHT)
+            if (level[15*y+x]==OneCell::CELL_ARROW_RIGHT)
             {
                 pos_Teleport_x=x+1;
                 pos_Teleport_y=y;
                 pos_Teleport_x_next=x+2;
                 pos_Teleport_y_next=y;
             }
-            if (levelPointer[15*y+x]==OneCell::CELL_ARROW_LEFT)
+            if (level[15*y+x]==OneCell::CELL_ARROW_LEFT)
             {
                 pos_Teleport_x=x-1;
                 pos_Teleport_y=y;
