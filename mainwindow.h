@@ -38,7 +38,7 @@ private:
     QShortcut * shSPACE;
 
     unsigned short int numberOfLevel;
-    static const unsigned short int LEVEL_BASIC=4;                     //number of levels
+    static const unsigned short int LEVEL_BASIC=7;                     //number of levels
     QAction * levelBasicAction[LEVEL_BASIC];
 
 protected:
