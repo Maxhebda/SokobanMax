@@ -102,6 +102,20 @@ unsigned short int Levels::level06[13*15]={
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+unsigned short int Levels::level07[13*15]={
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        5, 5, 5, 5, 5, 5, 0, 0, 0, 0, 5, 5, 5, 5, 5,
+        5, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 0, 0, 3, 5,
+        5, 0, 0, 2, 0, 2, 0, 5, 5, 5, 5, 3, 3, 3, 5,
+        5, 0, 5, 0, 0, 2, 0, 5, 5, 0, 0, 0, 0, 3, 5,
+        5, 0, 0, 2, 2, 2, 1, 0, 2, 4,10, 2, 0, 3, 5,
+        5, 5, 5, 0, 0, 2, 0, 0, 5, 0, 5, 0, 0, 3, 5,
+        0, 0, 5, 0, 0, 2, 5, 2, 5, 0,23, 3, 3, 3, 5,
+        0, 0, 5, 5, 0, 0, 0, 0, 0, 0, 5, 0, 0, 3, 5,
+        0, 0, 0, 5, 5, 5, 5, 5, 5,10, 5, 5, 5, 5, 5,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 //unsigned short int Levels::levelxx[13*15]={
 //        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 //        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -127,6 +141,7 @@ QVector<unsigned short int> Levels::basicLevel(unsigned short int nr)
     case 04 : {numerOfLevel = level04; break;}
     case 05 : {numerOfLevel = level05; break;}
     case 06 : {numerOfLevel = level06; break;}
+    case 07 : {numerOfLevel = level07; break;}
     default : {numerOfLevel = level00; break;}
     }
     QVector<unsigned short int> tmp;

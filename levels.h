@@ -12,6 +12,7 @@ public:
     static unsigned short int level04[13*15];
     static unsigned short int level05[13*15];
     static unsigned short int level06[13*15];
+    static unsigned short int level07[13*15];
     Levels();
     static QVector<unsigned short int> basicLevel(unsigned short int nr);
 };
