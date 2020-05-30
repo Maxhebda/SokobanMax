@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // ------------------------ connect menu -------------------------
     connect(ui->actionStart,SIGNAL(triggered()),this,SLOT(clickStart()));
+    connect(ui->actionEdytor_Plansz,SIGNAL(triggered()),this,SLOT(clickBoardsEditor()));
 
     addMenuLevel();
     showBoard();
@@ -38,6 +39,7 @@ MainWindow::~MainWindow()
     {
         delete levelBasicAction[i];
     }
+    delete mainWindow2;
 }
 
 void MainWindow::addMenuLevel()
@@ -167,6 +169,12 @@ void MainWindow::clickStart()
 {
     myBoard.load(Levels::basicLevel(numberOfLevel));
     showBoard();
+}
+
+void MainWindow::clickBoardsEditor()
+{
+    mainWindow2 = new MainWindow2(this);
+    mainWindow2->show();
 }
 
 void MainWindow::clickDOWN()

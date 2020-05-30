@@ -52,6 +52,8 @@
     </widget>
     <addaction name="actionStart"/>
     <addaction name="menuLevel"/>
+    <addaction name="separator"/>
+    <addaction name="actionEdytor_Plansz"/>
    </widget>
    <addaction name="menuGra"/>
   </widget>
@@ -63,6 +65,11 @@
   <action name="actionlevel_01">
    <property name="text">
     <string>level 01</string>
+   </property>
+  </action>
+  <action name="actionEdytor_Plansz">
+   <property name="text">
+    <string>Edytor Plansz</string>
    </property>
   </action>
  </widget>

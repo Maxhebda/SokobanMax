@@ -20,16 +20,19 @@ SOURCES += \
     levels.cpp \
     main.cpp \
     mainwindow.cpp \
+    mainwindow2.cpp \
     onecell.cpp
 
 HEADERS += \
     board.h \
     levels.h \
     mainwindow.h \
+    mainwindow2.h \
     onecell.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    mainwindow2.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -9,6 +9,7 @@
 #include <QImage>
 #include <QShortcut>
 #include <levels.h>
+#include <mainwindow2.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,6 +30,7 @@ private:
     Board myBoard;
     QImage * image;
     QPainter * paintOnImage;
+    MainWindow2 * mainWindow2;
 
     // shortcut up, down, right, left :
     QShortcut * shUP;
@@ -48,6 +50,7 @@ private slots:
     //---- menu
     void clickStart();
     void clickLevelBasic();
+    void clickBoardsEditor();
     //---- shortcut
     void clickUP();
     void clickDOWN();
