@@ -25,6 +25,10 @@ private:
     QImage * image;
     QPainter * paintOnImage;
     Board myEditorBoard;
+    short int getAmenuClick(unsigned short int x, unsigned short int y);   //-1=noClick, 0-9=a menu position
+    short int getXboardClick(unsigned short int x, unsigned short int y);  //-1=noClick, 0-14=x position
+    short int getYboardClick(unsigned short int x, unsigned short int y);  //-1=noClick, 0-12=x position
+    short int selectedMenu;
 
 protected:
     void paintEvent(QPaintEvent *);

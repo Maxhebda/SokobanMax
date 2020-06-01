@@ -1,5 +1,6 @@
 #include "mainwindow2.h"
 #include "ui_mainwindow2.h"
+#include <QString>
 
 MainWindow2::MainWindow2(QWidget *parent) :
     QMainWindow(parent),
@@ -19,7 +20,8 @@ MainWindow2::MainWindow2(QWidget *parent) :
     connect(ui->actionPusty_rodek,SIGNAL(triggered()),this,SLOT(clickFillEmptyCenter()));
     connect(ui->actionMa_a_pusta_ramka,SIGNAL(triggered()),this,SLOT(clickFillSmallEmptyFrame()));
 
-    myEditorBoard.clearToWall();
+    selectedMenu = 0;               //select position -> empty  (0=wall 1=empty 2=door etc)
+    myEditorBoard.clear();
     showEditorBoard();
 }
 
@@ -38,11 +40,27 @@ void MainWindow2::paintEvent(QPaintEvent *e)
 
 void MainWindow2::mousePressEvent(QMouseEvent *event)
 {
+    short int a;
     if(event->buttons() == Qt::LeftButton)
     {
-//        if (event->x()<20)
-//            ui->menuPlik->setTitle("tera");
+        a=getAmenuClick(event->x(),event->y());
+        if (a!=-1){
+            selectedMenu = a;
+        }
     }
+    showEditorBoard();
+}
+
+short int MainWindow2::getAmenuClick(unsigned short int x, unsigned short y)
+{
+    for (unsigned short int i=0; i<10; i++)
+    {
+        if (x>=10+35+51*i && x<=10+35+51*i+48 && y>=6+10+ui->menubar->height() && y<=54+10+ui->menubar->height())
+        {
+            return i;
+        }
+    }
+    return -1;
 }
 
 void MainWindow2::clickFillWall()
@@ -161,6 +179,11 @@ void MainWindow2::showEditorBoard()
     paintOnImage->drawImage(QRectF(35+51*8,6,48,48),QImage(":/img/arrowLeft.png"),source);
     paintOnImage->drawImage(QRectF(35+51*9,6,48,48),QImage(":/img/arrorRight.png"),source);
 
+    //------------------- drawing a frame at selected menu ---------------
+    paintOnImage->setPen(QColor(0,0,0));
+//    paintOnImage->drawRect(32+51*selectedMenu,3,53,53);
+    paintOnImage->drawRect(33+51*selectedMenu,4,51,51);
+    paintOnImage->drawRect(34+51*selectedMenu,5,49,49);
     for (unsigned short int y=0; y<13; y++)
     {
         for (unsigned short int x=0; x<15; x++)
