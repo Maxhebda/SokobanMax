@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <board.h>
 #include <onecell.h>
+#include <QMouseEvent>
 
 namespace Ui {
 class MainWindow2;
@@ -27,6 +28,7 @@ private:
 
 protected:
     void paintEvent(QPaintEvent *);
+    void mousePressEvent(QMouseEvent *);
 
 private slots:
     void clickFillWall();

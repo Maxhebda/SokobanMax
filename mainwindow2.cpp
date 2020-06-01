@@ -36,6 +36,15 @@ void MainWindow2::paintEvent(QPaintEvent *e)
     painter.end();
 }
 
+void MainWindow2::mousePressEvent(QMouseEvent *event)
+{
+    if(event->buttons() == Qt::LeftButton)
+    {
+//        if (event->x()<20)
+//            ui->menuPlik->setTitle("tera");
+    }
+}
+
 void MainWindow2::clickFillWall()
 {
     myEditorBoard.clearToWall();
@@ -116,6 +125,7 @@ void MainWindow2::showEditorBoard()
     QRectF source(0, 0, 47, 47);
 
     //-------------------------- drawing a grid --------------------------
+    paintOnImage->setPen(QColor(0,0,0));
     for (unsigned short int y=0; y<14; y++)
     {
         paintOnImage->drawLine(0,y*49+position_board,15*48+16,y*49+position_board);
@@ -125,6 +135,31 @@ void MainWindow2::showEditorBoard()
         paintOnImage->drawLine(x*49,position_board,x*49,13*48+14+position_board);
     }
 
+    //----------------------- drawing a menu grid ------------------------
+    paintOnImage->setPen(QColor(255,215,215));
+    for (unsigned short int a=0; a<2; a++)
+    {
+        paintOnImage->drawLine(32,a*51+3,32+10*48+32,a*51+3);
+        paintOnImage->drawLine(32,a*51+4,32+10*48+32,a*51+4);
+        paintOnImage->drawLine(32,a*51+5,32+10*48+32,a*51+5);
+    }
+    for (unsigned short int a=0; a<11; a++)
+    {
+        paintOnImage->drawLine(32+51*a,5,32+51*a,54);
+        paintOnImage->drawLine(33+51*a,5,33+51*a,54);
+        paintOnImage->drawLine(34+51*a,5,34+51*a,54);
+    }
+
+    //----------------------- drawing a menu object ----------------------
+    paintOnImage->drawImage(QRectF(35     ,6,48,48),QImage(":/img/wall.png"),source);
+    paintOnImage->drawImage(QRectF(35+51*2,6,48,48),QImage(":/img/door.png"),source);
+    paintOnImage->drawImage(QRectF(35+51*3,6,48,48),QImage(":/img/steve.png"),source);
+    paintOnImage->drawImage(QRectF(35+51*4,6,48,48),QImage(":/img/hole.png"),source);
+    paintOnImage->drawImage(QRectF(35+51*5,6,48,48),QImage(":/img/diamond.png"),source);
+    paintOnImage->drawImage(QRectF(35+51*6,6,48,48),QImage(":/img/arrowUp.png"),source);
+    paintOnImage->drawImage(QRectF(35+51*7,6,48,48),QImage(":/img/arrowDown.png"),source);
+    paintOnImage->drawImage(QRectF(35+51*8,6,48,48),QImage(":/img/arrowLeft.png"),source);
+    paintOnImage->drawImage(QRectF(35+51*9,6,48,48),QImage(":/img/arrorRight.png"),source);
 
     for (unsigned short int y=0; y<13; y++)
     {
