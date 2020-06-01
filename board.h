@@ -8,6 +8,7 @@ class Board
 public:
     Board();
     void clear();
+    void clearToWall();
     void load(QVector<unsigned short int> level);  //levels
     unsigned short int get(unsigned short int y, unsigned short int x);
     void set(unsigned short int y, unsigned short int x,unsigned short int a);

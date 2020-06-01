@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    // --------------------------- basic bacgroud --------------------
+    // --------------------------- basic backgroud --------------------
     image = new QImage(15*48,13*48,QImage::Format_RGB32);
     image->fill(QColor(180,180,170));
     paintOnImage = new QPainter;

@@ -15,6 +15,18 @@ void Board::clear()
         }
     }
 }
+
+void Board::clearToWall()
+{
+    for (unsigned short int y=0; y<13; y++)
+    {
+        for (unsigned short int x=0; x<15; x++)
+        {
+            myBoard[y][x].set(OneCell::CELL_WALL);
+        }
+    }
+}
+
 void Board::load(QVector<unsigned short int> level)
 {
     for (unsigned short int y=0; y<13; y++)
