@@ -1,6 +1,7 @@
 #include "mainwindow2.h"
 #include "ui_mainwindow2.h"
 #include <QString>
+#include <saveloadboard.h>
 
 MainWindow2::MainWindow2(QWidget *parent) :
     QMainWindow(parent),
@@ -20,6 +21,12 @@ MainWindow2::MainWindow2(QWidget *parent) :
     connect(ui->actionPusty_rodek,SIGNAL(triggered()),this,SLOT(clickFillEmptyCenter()));
     connect(ui->actionMa_a_pusta_ramka,SIGNAL(triggered()),this,SLOT(clickFillSmallEmptyFrame()));
 
+    //-------------------- reset counter elements at board ------------
+    counterHole = 0;
+    counterSteve = 0;
+    counterDiamond = 0;
+
+    SaveLoadBoard myAllBoard;
     selectedMenu = 0;               //select position -> empty  (0=wall 1=empty 2=door etc)
     myEditorBoard.clear();
     showEditorBoard();
@@ -28,6 +35,31 @@ MainWindow2::MainWindow2(QWidget *parent) :
 MainWindow2::~MainWindow2()
 {
     delete ui;
+}
+
+void MainWindow2::counterElementsAtBoard(unsigned short int & diamonds, unsigned short int & holes, bool & steve)
+{
+    diamonds=0;
+    holes=0;
+    steve=0;
+    for (unsigned short int y=0; y<13; y++)
+    {
+        for (unsigned short int x=0; x<15; x++)
+        {
+            if (myEditorBoard.get(y,x)==OneCell::CELL_DIAMOND || myEditorBoard.get(y,x)==OneCell::CELL_DIAMONDinHOLE)
+            {
+                diamonds++;
+            }
+            if (myEditorBoard.get(y,x)==OneCell::CELL_HOLE || myEditorBoard.get(y,x)==OneCell::CELL_DIAMONDinHOLE || myEditorBoard.get(y,x)==OneCell::CELL_STEVEinHOLE)
+            {
+                holes++;
+            }
+            if (myEditorBoard.get(y,x)==OneCell::CELL_STEVE || myEditorBoard.get(y,x)==OneCell::CELL_STEVEinHOLE)
+            {
+                steve=1;
+            }
+        }
+    }
 }
 
 void MainWindow2::paintEvent(QPaintEvent *e)
@@ -226,6 +258,7 @@ void MainWindow2::clickFillEmpty()
 
 void MainWindow2::clickFillEmptyFrame()
 {
+    myEditorBoard.clear();
     for (unsigned short int y=0; y<13; y++)
     {
         for (unsigned short int x=0; x<15; x++)
@@ -246,6 +279,7 @@ void MainWindow2::clickFillEmptyFrame()
 
 void MainWindow2::clickFillEmptyCenter()
 {
+    myEditorBoard.clear();
     for (unsigned short int y=0; y<13; y++)
     {
         for (unsigned short int x=0; x<15; x++)
@@ -266,6 +300,7 @@ void MainWindow2::clickFillEmptyCenter()
 
 void MainWindow2::clickFillSmallEmptyFrame()
 {
+    myEditorBoard.clear();
     for (unsigned short int y=0; y<13; y++)
     {
         for (unsigned short int x=0; x<15; x++)
@@ -327,6 +362,11 @@ void MainWindow2::showEditorBoard()
     paintOnImage->drawImage(QRectF(35+51*7,6,48,48),QImage(":/img/arrowDown.png"),source);
     paintOnImage->drawImage(QRectF(35+51*8,6,48,48),QImage(":/img/arrowLeft.png"),source);
     paintOnImage->drawImage(QRectF(35+51*9,6,48,48),QImage(":/img/arrorRight.png"),source);
+    counterElementsAtBoard(counterDiamond,counterHole,counterSteve);
+    paintOnImage->setPen(QColor(0,0,0));
+    paintOnImage->drawText(35+51*3,52,QString::number(counterSteve));
+    paintOnImage->drawText(35+51*4,52,QString::number(counterHole));
+    paintOnImage->drawText(35+51*5,52,QString::number(counterDiamond));
 
     //------------------- drawing a frame at selected menu ---------------
     paintOnImage->setPen(QColor(0,0,0));
@@ -401,4 +441,18 @@ void MainWindow2::showEditorBoard()
         }
     }
     repaint();
+}
+
+void MainWindow2::on_pushButton_clicked()   //clicked "zapisz"
+{
+    if (counterHole!=counterDiamond || counterSteve==0 || counterHole==0 || counterDiamond==0)
+    {
+        QMessageBox::critical(this, "Nie można dodać planszy!", "Na planszy musi występować przynajmniej jedna dziura, diament i Steve oraz liczba diamentów musi być równa liczbie dziur!" );
+    }
+    else
+    {
+        QMessageBox::about(this, "Udało się!", "Plaszcza została dodana!" );
+
+    }
+
 }

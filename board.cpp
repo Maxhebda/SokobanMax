@@ -11,6 +11,10 @@ Board::Board()
 
 void Board::clear()
 {
+    pos_Steve_x=-1;//null
+    pos_Steve_y=-1;
+    pos_arrow_x=-1;//null
+    pos_arrow_y=-1;
     for (unsigned short int y=0; y<13; y++)
     {
         for (unsigned short int x=0; x<15; x++)
@@ -22,6 +26,10 @@ void Board::clear()
 
 void Board::clearToWall()
 {
+    pos_Steve_x=-1;//null
+    pos_Steve_y=-1;
+    pos_arrow_x=-1;//null
+    pos_arrow_y=-1;
     for (unsigned short int y=0; y<13; y++)
     {
         for (unsigned short int x=0; x<15; x++)

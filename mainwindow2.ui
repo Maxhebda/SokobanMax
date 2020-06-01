@@ -31,7 +31,49 @@
   <property name="windowTitle">
    <string>Edytor Plansz</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>622</x>
+      <y>15</y>
+      <width>107</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>level 1</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>621</x>
+      <y>40</y>
+      <width>50</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>zapisz</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>40</y>
+      <width>50</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>+nowa</string>
+    </property>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>

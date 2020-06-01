@@ -21,14 +21,16 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mainwindow2.cpp \
-    onecell.cpp
+    onecell.cpp \
+    saveloadboard.cpp
 
 HEADERS += \
     board.h \
     levels.h \
     mainwindow.h \
     mainwindow2.h \
-    onecell.h
+    onecell.h \
+    saveloadboard.h
 
 FORMS += \
     mainwindow.ui \
