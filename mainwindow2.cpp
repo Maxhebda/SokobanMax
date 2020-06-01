@@ -81,12 +81,12 @@ void MainWindow2::myMouseClick(QMouseEvent *event)
             if (selectedMenu==3)
             {
                 //delete old steve
-                if (myEditorBoard.pos_Steve_x!=-1 && myEditorBoard.pos_Steve_y!=-1)
+                if (myEditorBoard.pos_Steve_x!=-1)
                 {
                     myEditorBoard.set(myEditorBoard.pos_Steve_y,myEditorBoard.pos_Steve_x,myEditorBoard.get(myEditorBoard.pos_Steve_y,myEditorBoard.pos_Steve_x)==OneCell::CELL_STEVE?OneCell::CELL_EMPTY:OneCell::CELL_HOLE);
                 }
                 //add new steve
-                if (myEditorBoard.get(y,x)==OneCell::CELL_HOLE)
+                if (myEditorBoard.get(y,x)==OneCell::CELL_HOLE || myEditorBoard.get(y,x)==OneCell::CELL_DIAMONDinHOLE)
                 {
                     myEditorBoard.set(y,x,OneCell::CELL_STEVEinHOLE);
                 }
@@ -111,6 +111,58 @@ void MainWindow2::myMouseClick(QMouseEvent *event)
                 {
                     myEditorBoard.set(y,x,OneCell::CELL_HOLE);
                 }
+            }
+            // select diamond
+            if (selectedMenu==5)
+            {
+                if (myEditorBoard.get(y,x)==OneCell::CELL_HOLE || myEditorBoard.get(y,x)==OneCell::CELL_STEVEinHOLE || myEditorBoard.get(y,x)==OneCell::CELL_DIAMONDinHOLE)
+                {
+                    myEditorBoard.set(y,x,OneCell::CELL_DIAMONDinHOLE);
+                }
+                else
+                {
+                    myEditorBoard.set(y,x,OneCell::CELL_DIAMOND);
+                }
+            }
+            // select arrow up
+            if (selectedMenu==6)
+            {
+                //delete old arrow
+                if (myEditorBoard.pos_arrow_x!=-1)
+                {
+                    myEditorBoard.set(myEditorBoard.pos_arrow_y,myEditorBoard.pos_arrow_x,OneCell::CELL_EMPTY);
+                }
+                myEditorBoard.set(y,x,OneCell::CELL_ARROW_UP);
+            }
+            // select arrow down
+            if (selectedMenu==7)
+            {
+                //delete old arrow
+                if (myEditorBoard.pos_arrow_x!=-1)
+                {
+                    myEditorBoard.set(myEditorBoard.pos_arrow_y,myEditorBoard.pos_arrow_x,OneCell::CELL_EMPTY);
+                }
+                myEditorBoard.set(y,x,OneCell::CELL_ARROW_DOWN);
+            }
+            // select arrow left
+            if (selectedMenu==8)
+            {
+                //delete old arrow
+                if (myEditorBoard.pos_arrow_x!=-1)
+                {
+                    myEditorBoard.set(myEditorBoard.pos_arrow_y,myEditorBoard.pos_arrow_x,OneCell::CELL_EMPTY);
+                }
+                myEditorBoard.set(y,x,OneCell::CELL_ARROW_LEFT);
+            }
+            // select arrow right
+            if (selectedMenu==9)
+            {
+                //delete old arrow
+                if (myEditorBoard.pos_arrow_x!=-1)
+                {
+                    myEditorBoard.set(myEditorBoard.pos_arrow_y,myEditorBoard.pos_arrow_x,OneCell::CELL_EMPTY);
+                }
+                myEditorBoard.set(y,x,OneCell::CELL_ARROW_RIGHT);
             }
         }
     }
