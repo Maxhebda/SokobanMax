@@ -2,6 +2,8 @@
 
 Board::Board()
 {
+    pos_Steve_x=-1;//null
+    pos_Steve_y=-1;
     clear();
 }
 
@@ -79,12 +81,20 @@ unsigned short int Board::get(unsigned short int y, unsigned short int x)
 
 void Board::set(unsigned short y, unsigned short x, unsigned short a)
 {
-    myBoard[y][x].set(a);
     if (a==OneCell::CELL_STEVE || a==OneCell::CELL_STEVEinHOLE)
     {
         pos_Steve_x=x;
         pos_Steve_y=y;
     }
+    else
+    {
+        if ((myBoard[y][x].get()==OneCell::CELL_STEVE || myBoard[y][x].get()==OneCell::CELL_STEVEinHOLE) && (a!=OneCell::CELL_STEVE || a!=OneCell::CELL_STEVEinHOLE))     //delete steve
+        {
+            pos_Steve_x=-1;
+            pos_Steve_y=-1;
+        }
+    }
+    myBoard[y][x].set(a);
 }
 
 bool Board::isWin()

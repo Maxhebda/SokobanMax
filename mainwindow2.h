@@ -26,13 +26,14 @@ private:
     QPainter * paintOnImage;
     Board myEditorBoard;
     short int getAmenuClick(unsigned short int x, unsigned short int y);   //-1=noClick, 0-9=a menu position
-    short int getXboardClick(unsigned short int x, unsigned short int y);  //-1=noClick, 0-14=x position
-    short int getYboardClick(unsigned short int x, unsigned short int y);  //-1=noClick, 0-12=x position
+    void getXboardClick(short int & x, short int & y, unsigned short int xInForm, unsigned short int yInForm);// x=0-14, y=0-12 -1=npClick
     short int selectedMenu;
+    void myMouseClick(QMouseEvent *);
 
 protected:
     void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *);
 
 private slots:
     void clickFillWall();

@@ -38,17 +38,96 @@ void MainWindow2::paintEvent(QPaintEvent *e)
     painter.end();
 }
 
-void MainWindow2::mousePressEvent(QMouseEvent *event)
+void MainWindow2::myMouseClick(QMouseEvent *event)
 {
-    short int a;
     if(event->buttons() == Qt::LeftButton)
     {
-        a=getAmenuClick(event->x(),event->y());
+        short int a=getAmenuClick(event->x(),event->y());
         if (a!=-1){
             selectedMenu = a;
         }
+        short int x,y;
+        getXboardClick(x,y,event->x(),event->y());
+        if (x!=-1 && y!=-1)
+        {
+            // select wall
+            if (selectedMenu==0)
+            {
+                myEditorBoard.set(y,x,OneCell::CELL_WALL);
+            }
+            // select door
+            if (selectedMenu==2)
+            {
+                myEditorBoard.set(y,x,OneCell::CELL_DOOR);
+            }
+            // select empty
+            if (selectedMenu==1)
+            {
+                if (myEditorBoard.get(y,x)==OneCell::CELL_STEVEinHOLE)
+                {
+                    myEditorBoard.set(y,x,OneCell::CELL_STEVE);
+                }
+                else
+                if (myEditorBoard.get(y,x)==OneCell::CELL_DIAMONDinHOLE)
+                {
+                    myEditorBoard.set(y,x,OneCell::CELL_DIAMOND);
+                }
+                else
+                {
+                    myEditorBoard.set(y,x,OneCell::CELL_EMPTY);
+                }
+            }
+            // select steve
+            if (selectedMenu==3)
+            {
+                //delete old steve
+                if (myEditorBoard.pos_Steve_x!=-1 && myEditorBoard.pos_Steve_y!=-1)
+                {
+                    myEditorBoard.set(myEditorBoard.pos_Steve_y,myEditorBoard.pos_Steve_x,myEditorBoard.get(myEditorBoard.pos_Steve_y,myEditorBoard.pos_Steve_x)==OneCell::CELL_STEVE?OneCell::CELL_EMPTY:OneCell::CELL_HOLE);
+                }
+                //add new steve
+                if (myEditorBoard.get(y,x)==OneCell::CELL_HOLE)
+                {
+                    myEditorBoard.set(y,x,OneCell::CELL_STEVEinHOLE);
+                }
+                else
+                {
+                    myEditorBoard.set(y,x,OneCell::CELL_STEVE);
+                }
+            }
+            // select hole
+            if (selectedMenu==4)
+            {
+                if (myEditorBoard.get(y,x)==OneCell::CELL_STEVE || myEditorBoard.get(y,x)==OneCell::CELL_STEVEinHOLE)
+                {
+                    myEditorBoard.set(y,x,OneCell::CELL_STEVEinHOLE);
+                }
+                else
+                if (myEditorBoard.get(y,x)==OneCell::CELL_DIAMOND || myEditorBoard.get(y,x)==OneCell::CELL_DIAMONDinHOLE)
+                {
+                    myEditorBoard.set(y,x,OneCell::CELL_DIAMONDinHOLE);
+                }
+                else
+                {
+                    myEditorBoard.set(y,x,OneCell::CELL_HOLE);
+                }
+            }
+        }
     }
     showEditorBoard();
+}
+
+void MainWindow2::mousePressEvent(QMouseEvent *event)
+{
+    myMouseClick(event);
+}
+
+void MainWindow2::mouseMoveEvent(QMouseEvent *event)
+{
+    if (getAmenuClick(event->x(),event->y())==-1)
+    {
+        myMouseClick(event);
+    }
 }
 
 short int MainWindow2::getAmenuClick(unsigned short int x, unsigned short y)
@@ -61,6 +140,24 @@ short int MainWindow2::getAmenuClick(unsigned short int x, unsigned short y)
         }
     }
     return -1;
+}
+
+void MainWindow2::getXboardClick(short int & x, short int & y, unsigned short int xInForm, unsigned short int yInForm)
+{
+    x=-1;
+    y=-1;
+    const unsigned short int position_board=60;
+    for (unsigned short int yyy=0; yyy<13; yyy++)
+    {
+        for (unsigned short int xxx=0; xxx<15; xxx++)
+        {
+            if (xInForm>=10+xxx*49+1 && xInForm<=10+xxx*49+1+48 && yInForm>=position_board+yyy*49+1+10+ui->menubar->height() && yInForm<=position_board+yyy*49+1+48+10+ui->menubar->height())
+            {
+                x=xxx;
+                y=yyy;
+            }
+        }
+    }
 }
 
 void MainWindow2::clickFillWall()
