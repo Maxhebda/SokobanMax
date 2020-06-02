@@ -8,6 +8,7 @@ MainWindow2::MainWindow2(QWidget *parent) :
     ui(new Ui::MainWindow2)
 {
     ui->setupUi(this);
+    dynamicLevelsMenu.clear();  // zero dynamic board container
     // --------------------------- basic bacgroud --------------------
     image = new QImage(15*48+16,13*48+14+60,QImage::Format_RGB32);   // 15 (+16) x 13 (+14 +60)
     image->fill(QColor(180,180,170));
@@ -100,14 +101,14 @@ void MainWindow2::myMouseClick(QMouseEvent *event)
                     myEditorBoard.set(y,x,OneCell::CELL_STEVE);
                 }
                 else
-                if (myEditorBoard.get(y,x)==OneCell::CELL_DIAMONDinHOLE)
-                {
-                    myEditorBoard.set(y,x,OneCell::CELL_DIAMOND);
-                }
-                else
-                {
-                    myEditorBoard.set(y,x,OneCell::CELL_EMPTY);
-                }
+                    if (myEditorBoard.get(y,x)==OneCell::CELL_DIAMONDinHOLE)
+                    {
+                        myEditorBoard.set(y,x,OneCell::CELL_DIAMOND);
+                    }
+                    else
+                    {
+                        myEditorBoard.set(y,x,OneCell::CELL_EMPTY);
+                    }
             }
             // select steve
             if (selectedMenu==3)
@@ -135,14 +136,14 @@ void MainWindow2::myMouseClick(QMouseEvent *event)
                     myEditorBoard.set(y,x,OneCell::CELL_STEVEinHOLE);
                 }
                 else
-                if (myEditorBoard.get(y,x)==OneCell::CELL_DIAMOND || myEditorBoard.get(y,x)==OneCell::CELL_DIAMONDinHOLE)
-                {
-                    myEditorBoard.set(y,x,OneCell::CELL_DIAMONDinHOLE);
-                }
-                else
-                {
-                    myEditorBoard.set(y,x,OneCell::CELL_HOLE);
-                }
+                    if (myEditorBoard.get(y,x)==OneCell::CELL_DIAMOND || myEditorBoard.get(y,x)==OneCell::CELL_DIAMONDinHOLE)
+                    {
+                        myEditorBoard.set(y,x,OneCell::CELL_DIAMONDinHOLE);
+                    }
+                    else
+                    {
+                        myEditorBoard.set(y,x,OneCell::CELL_HOLE);
+                    }
             }
             // select diamond
             if (selectedMenu==5)
@@ -265,7 +266,7 @@ void MainWindow2::clickFillEmptyFrame()
         {
             if (y>0 && y<12 && x>0 && x<14)
             {
-               myEditorBoard.set(y,x,OneCell::CELL_EMPTY);
+                myEditorBoard.set(y,x,OneCell::CELL_EMPTY);
             }
             else
             {
@@ -286,7 +287,7 @@ void MainWindow2::clickFillEmptyCenter()
         {
             if (y>2 && y<10 && x>3 && x<11)
             {
-               myEditorBoard.set(y,x,OneCell::CELL_EMPTY);
+                myEditorBoard.set(y,x,OneCell::CELL_EMPTY);
             }
             else
             {
@@ -307,7 +308,7 @@ void MainWindow2::clickFillSmallEmptyFrame()
         {
             if ((y==3 && x>3 && x<11)||(y==9 && x>3 && x<11)||(x==4 && y>3 && y<9)||(x==10 && y>3 && y<9))
             {
-               myEditorBoard.set(y,x,OneCell::CELL_WALL);
+                myEditorBoard.set(y,x,OneCell::CELL_WALL);
             }
             else
             {
@@ -370,7 +371,7 @@ void MainWindow2::showEditorBoard()
 
     //------------------- drawing a frame at selected menu ---------------
     paintOnImage->setPen(QColor(0,0,0));
-//    paintOnImage->drawRect(32+51*selectedMenu,3,53,53);
+    //    paintOnImage->drawRect(32+51*selectedMenu,3,53,53);
     paintOnImage->drawRect(33+51*selectedMenu,4,51,51);
     paintOnImage->drawRect(34+51*selectedMenu,5,49,49);
     for (unsigned short int y=0; y<13; y++)
@@ -378,65 +379,65 @@ void MainWindow2::showEditorBoard()
         for (unsigned short int x=0; x<15; x++)
         {
             switch (myEditorBoard.get(y,x)) {
-                case OneCell::CELL_EMPTY:
-                {
-                    break;
-                }
-                case OneCell::CELL_WALL:
-                {
-                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/wall.png"),source);
-                    break;
-                }
-                case OneCell::CELL_DOOR:
-                {
-                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/door.png"),source);
-                    break;
-                }
-                case OneCell::CELL_STEVE:
-                {
-                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/steve.png"),source);
-                    break;
-                }
-                case OneCell::CELL_HOLE:
-                {
-                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/hole.png"),source);
-                    break;
-                }
-                case OneCell::CELL_DIAMOND:
-                {
-                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/diamond.png"),source);
-                    break;
-                }
-                case OneCell::CELL_DIAMONDinHOLE:
-                {
-                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/diamondHole.png"),source);
-                    break;
-                }
-                case OneCell::CELL_STEVEinHOLE:
-                {
-                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/steveHole.png"),source);
-                    break;
-                }
-                case OneCell::CELL_ARROW_UP:
-                {
-                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/arrowUp.png"),source);
-                    break;
-                }
-                case OneCell::CELL_ARROW_DOWN:
-                {
-                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/arrowDown.png"),source);
-                    break;
-                }
-                case OneCell::CELL_ARROW_LEFT:
-                {
-                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/arrowLeft.png"),source);
-                    break;
-                }
-                case OneCell::CELL_ARROW_RIGHT:
-                {
-                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/arrorRight.png"),source);
-                    break;
-                }
+            case OneCell::CELL_EMPTY:
+            {
+                break;
+            }
+            case OneCell::CELL_WALL:
+            {
+                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/wall.png"),source);
+                break;
+            }
+            case OneCell::CELL_DOOR:
+            {
+                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/door.png"),source);
+                break;
+            }
+            case OneCell::CELL_STEVE:
+            {
+                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/steve.png"),source);
+                break;
+            }
+            case OneCell::CELL_HOLE:
+            {
+                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/hole.png"),source);
+                break;
+            }
+            case OneCell::CELL_DIAMOND:
+            {
+                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/diamond.png"),source);
+                break;
+            }
+            case OneCell::CELL_DIAMONDinHOLE:
+            {
+                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/diamondHole.png"),source);
+                break;
+            }
+            case OneCell::CELL_STEVEinHOLE:
+            {
+                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/steveHole.png"),source);
+                break;
+            }
+            case OneCell::CELL_ARROW_UP:
+            {
+                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/arrowUp.png"),source);
+                break;
+            }
+            case OneCell::CELL_ARROW_DOWN:
+            {
+                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/arrowDown.png"),source);
+                break;
+            }
+            case OneCell::CELL_ARROW_LEFT:
+            {
+                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/arrowLeft.png"),source);
+                break;
+            }
+            case OneCell::CELL_ARROW_RIGHT:
+            {
+                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/arrorRight.png"),source);
+                break;
+            }
             }
         }
     }
@@ -447,12 +448,59 @@ void MainWindow2::on_pushButton_clicked()   //clicked "zapisz"
 {
     if (counterHole!=counterDiamond || counterSteve==0 || counterHole==0 || counterDiamond==0)
     {
-        QMessageBox::critical(this, "Nie można dodać planszy!", "Na planszy musi występować przynajmniej jedna dziura, diament i Steve oraz liczba diamentów musi być równa liczbie dziur!" );
+        QMessageBox::critical(this, "Nie można dodać tej planszy!", "Na planszy musi występować przynajmniej jedna dziura, diament i Steve oraz liczba diamentów musi być równa liczbie dziur!" );
     }
     else
     {
-        QMessageBox::about(this, "Udało się!", "Plaszcza została dodana!" );
+        int nrCurrentIndex = ui->comboBox->currentIndex();
+        // ---------- clear all levels of comboBox and add all -------
+        char tmp[9];
+        ui->comboBox->clear();
+        unsigned short int levels;
+        for (levels=0; levels<dynamicLevelsMenu.size();levels++)
+        {
+            sprintf(tmp,"Level %d",levels+1);
+            ui->comboBox->addItem(tmp);
+        }
+        if (nrCurrentIndex==-1)
+        {
+            // ---------- add new level -----------------------
+            sprintf(tmp,"Level %d",levels+1);
+            ui->comboBox->addItem(tmp);
+            dynamicLevelsMenu.push_back(tmp);
+            ui->comboBox->setCurrentIndex(levels);
+        }
+        else
+        {
+            ui->comboBox->setCurrentIndex(nrCurrentIndex);
+        }
 
+        // tutaj zapiszesz pod wskazany nrCurrentIndex level
+        ui->menuPlik->setTitle(QString::number(ui->comboBox->currentIndex()));
+
+        QMessageBox::about(this, "Udało się!", "Plaszcza została zaktualizowana!" );
     }
+}
 
+void MainWindow2::on_pushButton_2_clicked()     //clicked +nowa
+{
+    // ---------- clear all levels of comboBox and add all -------
+    unsigned short int tmpSize = dynamicLevelsMenu.size();
+    if (tmpSize>=120)
+    {
+        QMessageBox::critical(this, "Nie można dodać planszy!", "Maksymalnie może być 120 plansz w jednym pliku." );
+        return;
+    }
+    unsigned short int levels;
+    char tmp[9];
+    ui->comboBox->clear();
+    for (levels=0; levels<tmpSize;levels++)
+    {
+        sprintf(tmp,"Level %d",levels+1);
+        ui->comboBox->addItem(tmp);
+    }
+    sprintf(tmp,"Level %d",levels+1);
+    ui->comboBox->addItem(tmp);
+    dynamicLevelsMenu.push_back(tmp);
+    ui->comboBox->setCurrentIndex(levels);
 }

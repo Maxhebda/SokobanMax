@@ -7,6 +7,8 @@
 #include <onecell.h>
 #include <QMouseEvent>
 #include <QMessageBox>
+#include <QVector>
+#include <QAction>
 
 namespace Ui {
 class MainWindow2;
@@ -30,6 +32,9 @@ private:
     void getXboardClick(short int & x, short int & y, unsigned short int xInForm, unsigned short int yInForm);// x=0-14, y=0-12 -1=npClick
     short int selectedMenu;
 
+    //------- name dynamic board container --------------
+    QVector <QString> dynamicLevelsMenu;
+
     //------------ counter elements at board ------------
     void counterElementsAtBoard(unsigned short int & diamonds, unsigned short int & holes, bool & steve);
     unsigned short int counterDiamond;
@@ -50,6 +55,7 @@ private slots:
     void clickFillEmptyCenter();
     void clickFillSmallEmptyFrame();
     void on_pushButton_clicked();
+    void on_pushButton_2_clicked();
 };
 
 #endif // MAINWINDOW2_H
