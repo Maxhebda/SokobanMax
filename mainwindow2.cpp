@@ -2,6 +2,7 @@
 #include "ui_mainwindow2.h"
 #include <QString>
 #include <saveloadboard.h>
+#include "cstdarg" //needed for my mySprintf function
 
 MainWindow2::MainWindow2(QWidget *parent) :
     QMainWindow(parent),
@@ -26,6 +27,7 @@ MainWindow2::MainWindow2(QWidget *parent) :
     counterHole = 0;
     counterSteve = 0;
     counterDiamond = 0;
+    counterDiamondWithoutHole = 0;
 
     SaveLoadBoard myAllBoard;
     selectedMenu = 0;               //select position -> empty  (0=wall 1=empty 2=door etc)
@@ -38,11 +40,22 @@ MainWindow2::~MainWindow2()
     delete ui;
 }
 
-void MainWindow2::counterElementsAtBoard(unsigned short int & diamonds, unsigned short int & holes, bool & steve)
+//----------------------------------------- My function mySprintf -------------------------------------------
+template<typename ... Args>
+QString mySprintf(const char * format,Args ... a)       // use: s = mySpring("Its %d %s .",12,"May");
+{                                                       //      s = "12 May .";
+    char scream[255];
+    sprintf(scream,format,a ...);
+    return scream;
+}
+//----------------------------------------- My function mySprintf -------------------------------------------
+
+void MainWindow2::counterElementsAtBoard(unsigned short int & diamonds, unsigned short int & holes, bool & steve, bool & diamondsWithoutHole)
 {
     diamonds=0;
     holes=0;
     steve=0;
+    diamondsWithoutHole=0;
     for (unsigned short int y=0; y<13; y++)
     {
         for (unsigned short int x=0; x<15; x++)
@@ -50,6 +63,10 @@ void MainWindow2::counterElementsAtBoard(unsigned short int & diamonds, unsigned
             if (myEditorBoard.get(y,x)==OneCell::CELL_DIAMOND || myEditorBoard.get(y,x)==OneCell::CELL_DIAMONDinHOLE)
             {
                 diamonds++;
+                if (myEditorBoard.get(y,x)==OneCell::CELL_DIAMOND)
+                {
+                    diamondsWithoutHole=1;
+                }
             }
             if (myEditorBoard.get(y,x)==OneCell::CELL_HOLE || myEditorBoard.get(y,x)==OneCell::CELL_DIAMONDinHOLE || myEditorBoard.get(y,x)==OneCell::CELL_STEVEinHOLE)
             {
@@ -363,7 +380,7 @@ void MainWindow2::showEditorBoard()
     paintOnImage->drawImage(QRectF(35+51*7,6,48,48),QImage(":/img/arrowDown.png"),source);
     paintOnImage->drawImage(QRectF(35+51*8,6,48,48),QImage(":/img/arrowLeft.png"),source);
     paintOnImage->drawImage(QRectF(35+51*9,6,48,48),QImage(":/img/arrorRight.png"),source);
-    counterElementsAtBoard(counterDiamond,counterHole,counterSteve);
+    counterElementsAtBoard(counterDiamond,counterHole,counterSteve,counterDiamondWithoutHole);
     paintOnImage->setPen(QColor(0,0,0));
     paintOnImage->drawText(35+51*3,52,QString::number(counterSteve));
     paintOnImage->drawText(35+51*4,52,QString::number(counterHole));
@@ -446,28 +463,25 @@ void MainWindow2::showEditorBoard()
 
 void MainWindow2::on_pushButton_clicked()   //clicked "zapisz"
 {
-    if (counterHole!=counterDiamond || counterSteve==0 || counterHole==0 || counterDiamond==0)
+    if (counterHole!=counterDiamond || counterSteve==0 || counterHole==0 || counterDiamond==0 || counterDiamondWithoutHole==0)
     {
-        QMessageBox::critical(this, "Nie można dodać tej planszy!", "Na planszy musi występować przynajmniej jedna dziura, diament i Steve oraz liczba diamentów musi być równa liczbie dziur!" );
+        QMessageBox::critical(this, "Nie można dodać tej planszy - Jest nieprawidłowa!", "Sprawdź czy:\n1. Na planszy występuje przynajmniej jedna dziura, diament i Steve\n2. Liczba diamentów jest równa liczbie dziur,\n3. Przynajmniej jeden diament stoi poza dziurą." );
     }
     else
     {
         int nrCurrentIndex = ui->comboBox->currentIndex();
         // ---------- clear all levels of comboBox and add all -------
-        char tmp[9];
         ui->comboBox->clear();
         unsigned short int levels;
         for (levels=0; levels<dynamicLevelsMenu.size();levels++)
         {
-            sprintf(tmp,"Level %d",levels+1);
-            ui->comboBox->addItem(tmp);
+            ui->comboBox->addItem(mySprintf("Level %d",levels+1));
         }
         if (nrCurrentIndex==-1)
         {
             // ---------- add new level -----------------------
-            sprintf(tmp,"Level %d",levels+1);
-            ui->comboBox->addItem(tmp);
-            dynamicLevelsMenu.push_back(tmp);
+            ui->comboBox->addItem(mySprintf("Level %d",levels+1));
+            dynamicLevelsMenu.push_back(mySprintf("Level %d",levels+1));
             ui->comboBox->setCurrentIndex(levels);
         }
         else
@@ -478,7 +492,7 @@ void MainWindow2::on_pushButton_clicked()   //clicked "zapisz"
         // tutaj zapiszesz pod wskazany nrCurrentIndex level
         ui->menuPlik->setTitle(QString::number(ui->comboBox->currentIndex()));
 
-        QMessageBox::about(this, "Udało się!", "Plaszcza została zaktualizowana!" );
+        QMessageBox::about(this, "Udało się!", mySprintf("Plansza [Level %d] została zaktualizowana!",ui->comboBox->currentIndex()+1));
     }
 }
 
@@ -492,15 +506,12 @@ void MainWindow2::on_pushButton_2_clicked()     //clicked +nowa
         return;
     }
     unsigned short int levels;
-    char tmp[9];
     ui->comboBox->clear();
     for (levels=0; levels<tmpSize;levels++)
     {
-        sprintf(tmp,"Level %d",levels+1);
-        ui->comboBox->addItem(tmp);
+        ui->comboBox->addItem(mySprintf("Level %d",levels+1));
     }
-    sprintf(tmp,"Level %d",levels+1);
-    ui->comboBox->addItem(tmp);
-    dynamicLevelsMenu.push_back(tmp);
+    ui->comboBox->addItem(mySprintf("Level %d",levels+1));
+    dynamicLevelsMenu.push_back(mySprintf("Level %d",levels+1));
     ui->comboBox->setCurrentIndex(levels);
 }

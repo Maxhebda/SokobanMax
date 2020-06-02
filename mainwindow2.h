@@ -32,14 +32,16 @@ private:
     void getXboardClick(short int & x, short int & y, unsigned short int xInForm, unsigned short int yInForm);// x=0-14, y=0-12 -1=npClick
     short int selectedMenu;
 
+
     //------- name dynamic board container --------------
     QVector <QString> dynamicLevelsMenu;
 
     //------------ counter elements at board ------------
-    void counterElementsAtBoard(unsigned short int & diamonds, unsigned short int & holes, bool & steve);
+    void counterElementsAtBoard(unsigned short int & diamonds, unsigned short int & holes, bool & steve, bool & diamondsWithoutHole);
     unsigned short int counterDiamond;
     unsigned short int counterHole;
     bool               counterSteve;
+    bool               counterDiamondWithoutHole;
 
     void myMouseClick(QMouseEvent *);
 
