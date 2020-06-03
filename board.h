@@ -11,6 +11,7 @@ public:
     void clearToWall();
     void load(QVector<unsigned short int> level);  //levels
     unsigned short int get(unsigned short int y, unsigned short int x);
+    QVector<unsigned short int> getBoardToVector();
     void set(unsigned short int y, unsigned short int x,unsigned short int a);
     short int pos_Steve_x;
     short int pos_Steve_y;                  //position Steve

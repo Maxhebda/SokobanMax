@@ -2,7 +2,6 @@
 #include "ui_mainwindow2.h"
 #include <QString>
 #include <saveloadboard.h>
-#include "cstdarg" //needed for my mySprintf function
 
 MainWindow2::MainWindow2(QWidget *parent) :
     QMainWindow(parent),
@@ -483,14 +482,21 @@ void MainWindow2::on_pushButton_clicked()   //clicked "zapisz"
             ui->comboBox->addItem(mySprintf("Level %d",levels+1));
             dynamicLevelsMenu.push_back(mySprintf("Level %d",levels+1));
             ui->comboBox->setCurrentIndex(levels);
+
+            // ------- saving the current board to memory -----
+            saveLoadBoard.addNewBoard(myEditorBoard.getBoardToVector());
+            ui->menuPlik->setTitle(mySprintf("new counter=%d",saveLoadBoard.getCounterLevels()));
         }
         else
         {
             ui->comboBox->setCurrentIndex(nrCurrentIndex);
+            // ------- saving the current board to memory -----
+            saveLoadBoard.addBoard(myEditorBoard.getBoardToVector(),nrCurrentIndex);
+            ui->menuPlik->setTitle(mySprintf("add currentIndex=%d, counter=%d",nrCurrentIndex,saveLoadBoard.getCounterLevels()));
         }
 
         // tutaj zapiszesz pod wskazany nrCurrentIndex level
-        ui->menuPlik->setTitle(QString::number(ui->comboBox->currentIndex()));
+//        ui->menuPlik->setTitle(QString::number(ui->comboBox->currentIndex()));
 
         QMessageBox::about(this, "Udało się!", mySprintf("Plansza [Level %d] została zaktualizowana!",ui->comboBox->currentIndex()+1));
     }
@@ -514,4 +520,7 @@ void MainWindow2::on_pushButton_2_clicked()     //clicked +nowa
     ui->comboBox->addItem(mySprintf("Level %d",levels+1));
     dynamicLevelsMenu.push_back(mySprintf("Level %d",levels+1));
     ui->comboBox->setCurrentIndex(levels);
+    // ------- saving the current board to memory -----
+    saveLoadBoard.addNewBoard();    //add empty board (without argument)
+    ui->menuPlik->setTitle(mySprintf("newEmpty counter=%d",saveLoadBoard.getCounterLevels()));
 }

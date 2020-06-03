@@ -93,6 +93,19 @@ unsigned short int Board::get(unsigned short int y, unsigned short int x)
     return myBoard[y][x].get();
 }
 
+QVector<unsigned short int> Board::getBoardToVector()
+{
+    QVector<unsigned short int> tmp;
+    for (unsigned short int y=0; y<13; y++)
+    {
+        for (unsigned short int x=0; x<15; x++)
+        {
+            tmp.push_back(myBoard[y][x].get());
+        }
+    }
+    return tmp;
+}
+
 void Board::set(unsigned short y, unsigned short x, unsigned short a)
 {
     if (a==OneCell::CELL_STEVE || a==OneCell::CELL_STEVEinHOLE)

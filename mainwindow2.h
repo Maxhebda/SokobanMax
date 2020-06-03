@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QVector>
 #include <QAction>
+#include <saveloadboard.h>
 
 namespace Ui {
 class MainWindow2;
@@ -35,6 +36,9 @@ private:
 
     //------- name dynamic board container --------------
     QVector <QString> dynamicLevelsMenu;
+
+    //----------- class storing all boards --------------
+    SaveLoadBoard saveLoadBoard;
 
     //------------ counter elements at board ------------
     void counterElementsAtBoard(unsigned short int & diamonds, unsigned short int & holes, bool & steve, bool & diamondsWithoutHole);
