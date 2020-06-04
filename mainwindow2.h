@@ -62,6 +62,7 @@ private slots:
     void clickFillSmallEmptyFrame();
     void on_pushButton_clicked();
     void on_pushButton_2_clicked();
+    void on_comboBox_activated(int index);
 };
 
 #endif // MAINWINDOW2_H

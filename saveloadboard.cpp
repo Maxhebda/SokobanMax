@@ -53,3 +53,29 @@ unsigned short int SaveLoadBoard::getCounterLevels()
 {
     return counterLevels;
 }
+
+QVector<unsigned short int> SaveLoadBoard::getBoard(unsigned short int index)
+{
+    QVector<unsigned short int> tmp;
+    if (index<counterLevels)
+    {
+        for (unsigned short int y=0; y<13; y++)
+        {
+            for (unsigned short int x=0; x<15; x++)
+            {
+                tmp.push_back(allTheBoards[index*13*15 + y*15+x]);
+            }
+        }
+    }
+    else
+    {
+        for (unsigned short int y=0; y<13; y++)
+        {
+            for (unsigned short int x=0; x<15; x++)
+            {
+                tmp.push_back(0);
+            }
+        }
+    }
+    return tmp;
+}

@@ -45,6 +45,8 @@ void Board::load(QVector<unsigned short int> level)
     pos_Teleport_y=-1;
     pos_Teleport_x_next=-1;
     pos_Teleport_y_next=-1;
+    pos_Steve_x=-1;
+    pos_Steve_y=-1;
     for (unsigned short int y=0; y<13; y++)
     {
         for (unsigned short int x=0; x<15; x++)
