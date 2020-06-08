@@ -35,8 +35,8 @@
    <widget class="QComboBox" name="comboBox">
     <property name="geometry">
      <rect>
-      <x>622</x>
-      <y>15</y>
+      <x>616</x>
+      <y>13</y>
       <width>107</width>
       <height>22</height>
      </rect>
@@ -45,27 +45,40 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>621</x>
-      <y>40</y>
-      <width>50</width>
+      <x>616</x>
+      <y>38</y>
+      <width>126</width>
       <height>28</height>
      </rect>
     </property>
     <property name="text">
-     <string>zapis</string>
+     <string>dodaj do zestawu</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>680</x>
-      <y>40</y>
-      <width>50</width>
-      <height>28</height>
+      <x>726</x>
+      <y>13</y>
+      <width>16</width>
+      <height>22</height>
      </rect>
     </property>
     <property name="text">
-     <string>+nowa</string>
+     <string>+</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>20</y>
+      <width>55</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Zestaw :</string>
     </property>
    </widget>
   </widget>
@@ -91,7 +104,7 @@
     </property>
     <widget class="QMenu" name="menuWyczy_wszystko">
      <property name="title">
-      <string>Wyczyść wszystko</string>
+      <string>Wyczyść aktualną planszę</string>
      </property>
      <addaction name="actionWype_nij_pustym_blokiem"/>
      <addaction name="actionWype_nij_cian"/>
@@ -100,6 +113,7 @@
      <addaction name="actionMa_a_pusta_ramka"/>
     </widget>
     <addaction name="menuWyczy_wszystko"/>
+    <addaction name="actionUsu_aktualn_plansz"/>
    </widget>
    <addaction name="menuPlik"/>
    <addaction name="menuEdycja"/>
@@ -137,6 +151,11 @@
   <action name="actionMa_a_pusta_ramka">
    <property name="text">
     <string>Mała pusta ramka</string>
+   </property>
+  </action>
+  <action name="actionUsu_aktualn_plansz">
+   <property name="text">
+    <string>Usuń aktualną planszę</string>
    </property>
   </action>
  </widget>

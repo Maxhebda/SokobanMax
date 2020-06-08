@@ -89,6 +89,7 @@ void MainWindow2::paintEvent(QPaintEvent *e)
 
 void MainWindow2::myMouseClick(QMouseEvent *event)
 {
+    bool isChanged=false;
     if(event->buttons() == Qt::LeftButton)
     {
         short int a=getAmenuClick(event->x(),event->y());
@@ -103,15 +104,18 @@ void MainWindow2::myMouseClick(QMouseEvent *event)
             if (selectedMenu==0)
             {
                 myEditorBoard.set(y,x,OneCell::CELL_WALL);
+                isChanged=true;
             }
             // select door
             if (selectedMenu==2)
             {
+                isChanged=true;
                 myEditorBoard.set(y,x,OneCell::CELL_DOOR);
             }
             // select empty
             if (selectedMenu==1)
             {
+                isChanged=true;
                 if (myEditorBoard.get(y,x)==OneCell::CELL_STEVEinHOLE)
                 {
                     myEditorBoard.set(y,x,OneCell::CELL_STEVE);
@@ -129,6 +133,7 @@ void MainWindow2::myMouseClick(QMouseEvent *event)
             // select steve
             if (selectedMenu==3)
             {
+                isChanged=true;
                 //delete old steve
                 if (myEditorBoard.pos_Steve_x!=-1)
                 {
@@ -147,6 +152,7 @@ void MainWindow2::myMouseClick(QMouseEvent *event)
             // select hole
             if (selectedMenu==4)
             {
+                isChanged=true;
                 if (myEditorBoard.get(y,x)==OneCell::CELL_STEVE || myEditorBoard.get(y,x)==OneCell::CELL_STEVEinHOLE)
                 {
                     myEditorBoard.set(y,x,OneCell::CELL_STEVEinHOLE);
@@ -164,6 +170,7 @@ void MainWindow2::myMouseClick(QMouseEvent *event)
             // select diamond
             if (selectedMenu==5)
             {
+                isChanged=true;
                 if (myEditorBoard.get(y,x)==OneCell::CELL_HOLE || myEditorBoard.get(y,x)==OneCell::CELL_STEVEinHOLE || myEditorBoard.get(y,x)==OneCell::CELL_DIAMONDinHOLE)
                 {
                     myEditorBoard.set(y,x,OneCell::CELL_DIAMONDinHOLE);
@@ -176,6 +183,7 @@ void MainWindow2::myMouseClick(QMouseEvent *event)
             // select arrow up
             if (selectedMenu==6)
             {
+                isChanged=true;
                 //delete old arrow
                 if (myEditorBoard.pos_arrow_x!=-1)
                 {
@@ -186,6 +194,7 @@ void MainWindow2::myMouseClick(QMouseEvent *event)
             // select arrow down
             if (selectedMenu==7)
             {
+                isChanged=true;
                 //delete old arrow
                 if (myEditorBoard.pos_arrow_x!=-1)
                 {
@@ -196,6 +205,7 @@ void MainWindow2::myMouseClick(QMouseEvent *event)
             // select arrow left
             if (selectedMenu==8)
             {
+                isChanged=true;
                 //delete old arrow
                 if (myEditorBoard.pos_arrow_x!=-1)
                 {
@@ -206,6 +216,7 @@ void MainWindow2::myMouseClick(QMouseEvent *event)
             // select arrow right
             if (selectedMenu==9)
             {
+                isChanged=true;
                 //delete old arrow
                 if (myEditorBoard.pos_arrow_x!=-1)
                 {
@@ -213,6 +224,13 @@ void MainWindow2::myMouseClick(QMouseEvent *event)
                 }
                 myEditorBoard.set(y,x,OneCell::CELL_ARROW_RIGHT);
             }
+        }
+        int nrCurrentIndex = ui->comboBox->currentIndex();
+        if (nrCurrentIndex!=-1 && isChanged)
+        {
+            int nrCurrentIndex = ui->comboBox->currentIndex();
+            ui->comboBox->setItemText(nrCurrentIndex,mySprintf("Level %d *",nrCurrentIndex+1));
+//            dynamicLevelsMenu[nrCurrentIndex]=mySprintf("Level %d *",nrCurrentIndex+1);
         }
     }
     showEditorBoard();
@@ -500,11 +518,11 @@ void MainWindow2::on_pushButton_clicked()   //clicked "zapisz"
 
 void MainWindow2::on_pushButton_2_clicked()     //clicked +nowa
 {
-//    if (counterHole!=counterDiamond || counterSteve==0 || counterHole==0 || counterDiamond==0 || counterDiamondWithoutHole==0)
-//    {
-//        QMessageBox::critical(this, "Nie można dodać nowej planszy!", "Musisz zapisać aktualną planszę by móc dodać nową (naciśnij -> zapis)." );
-//        return;
-//    }
+    //    if (counterHole!=counterDiamond || counterSteve==0 || counterHole==0 || counterDiamond==0 || counterDiamondWithoutHole==0)
+    //    {
+    //        QMessageBox::critical(this, "Nie można dodać nowej planszy!", "Musisz zapisać aktualną planszę by móc dodać nową (naciśnij -> zapis)." );
+    //        return;
+    //    }
 
     // ---------- clear all levels of comboBox and add all -------
     unsigned short int tmpSize = dynamicLevelsMenu.size();
