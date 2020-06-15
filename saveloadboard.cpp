@@ -79,3 +79,12 @@ QVector<unsigned short int> SaveLoadBoard::getBoard(unsigned short int index)
     }
     return tmp;
 }
+
+void SaveLoadBoard::deleteBoard(unsigned short int index)
+{
+    if (index<0 || index>counterLevels-1 || counterLevels==0)
+        return;
+
+    counterLevels--;
+    allTheBoards.remove(index*13*15,13*15);
+}

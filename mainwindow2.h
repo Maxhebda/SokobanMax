@@ -35,7 +35,8 @@ private:
 
 
     //------- name dynamic board container --------------
-    QVector <QString> dynamicLevelsMenu;
+    unsigned short int dynamicLevelsMenu;
+    QVector <char>     dynamicLevelsMenuStar;    // ? "*"
 
     //----------- class storing all boards --------------
     SaveLoadBoard saveLoadBoard;
@@ -55,14 +56,17 @@ protected:
     void mouseMoveEvent(QMouseEvent *);
 
 private slots:
+    // menu
     void clickFillWall();
     void clickFillEmpty();
     void clickFillEmptyFrame();
     void clickFillEmptyCenter();
     void clickFillSmallEmptyFrame();
-    void on_pushButton_clicked();
-    void on_pushButton_2_clicked();
-    void on_comboBox_activated(int index);
+    void clickDeleteActiveBoard();
+    // form
+    void on_pushButton_clicked();           //clicked "dodaj do zestawu"
+    void on_pushButton_2_clicked();         //clicked +nowa
+    void on_comboBox_activated(int index);  //combobox
 };
 
 #endif // MAINWINDOW2_H

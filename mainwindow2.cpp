@@ -8,7 +8,8 @@ MainWindow2::MainWindow2(QWidget *parent) :
     ui(new Ui::MainWindow2)
 {
     ui->setupUi(this);
-    dynamicLevelsMenu.clear();  // zero dynamic board container
+    dynamicLevelsMenu=0;  // zero dynamic board container
+    dynamicLevelsMenuStar.clear();
     // --------------------------- basic bacgroud --------------------
     image = new QImage(15*48+16,13*48+14+60,QImage::Format_RGB32);   // 15 (+16) x 13 (+14 +60)
     image->fill(QColor(180,180,170));
@@ -21,6 +22,7 @@ MainWindow2::MainWindow2(QWidget *parent) :
     connect(ui->actionPusta_ramka,SIGNAL(triggered()),this,SLOT(clickFillEmptyFrame()));
     connect(ui->actionPusty_rodek,SIGNAL(triggered()),this,SLOT(clickFillEmptyCenter()));
     connect(ui->actionMa_a_pusta_ramka,SIGNAL(triggered()),this,SLOT(clickFillSmallEmptyFrame()));
+    connect(ui->actionUsu_aktualn_plansz,SIGNAL(triggered()),this,SLOT(clickDeleteActiveBoard()));
 
     //-------------------- reset counter elements at board ------------
     counterHole = 0;
@@ -230,7 +232,7 @@ void MainWindow2::myMouseClick(QMouseEvent *event)
         {
             int nrCurrentIndex = ui->comboBox->currentIndex();
             ui->comboBox->setItemText(nrCurrentIndex,mySprintf("Level %d *",nrCurrentIndex+1));
-//            dynamicLevelsMenu[nrCurrentIndex]=mySprintf("Level %d *",nrCurrentIndex+1);
+            //            dynamicLevelsMenu[nrCurrentIndex]=mySprintf("Level %d *",nrCurrentIndex+1);
         }
     }
     showEditorBoard();
@@ -306,7 +308,6 @@ void MainWindow2::clickFillEmptyFrame()
             {
                 myEditorBoard.set(y,x,OneCell::CELL_WALL);
             }
-
         }
     }
     showEditorBoard();
@@ -352,6 +353,38 @@ void MainWindow2::clickFillSmallEmptyFrame()
         }
     }
     showEditorBoard();
+}
+
+void MainWindow2::clickDeleteActiveBoard()
+{
+    int nrCurrentIndex = ui->comboBox->currentIndex();
+    if (nrCurrentIndex==-1)
+    {
+        QMessageBox::critical(this, "Zestaw jest pusty!", "Zestaw nie posiada żadnych plansz." );
+        return;
+    }
+    // ---------- removing the board from the board store --------
+    saveLoadBoard.deleteBoard(nrCurrentIndex);
+
+    // ---- removing the name "level x+1 from the comboBox -------
+    dynamicLevelsMenu--;
+    dynamicLevelsMenuStar.remove(nrCurrentIndex);
+
+    // ---------- clear all levels of comboBox and add all -------
+    ui->comboBox->clear();
+    unsigned short int levels;
+    for (levels=0; levels<dynamicLevelsMenu;levels++)
+    {
+        ui->comboBox->addItem(mySprintf("Level %d %c",levels+1,dynamicLevelsMenuStar[levels]));
+    }
+
+    //    if (ui->comboBox->count()>0)
+    //    {
+    ui->comboBox->setCurrentIndex(0);
+    //    }
+    myEditorBoard.load(saveLoadBoard.getBoard(0));
+    showEditorBoard();
+    QMessageBox::about(this, "Usunięto planszę!", mySprintf("Plansza [Level %d] została usunięta z zestawu!\nPlanszom znajdującym się za nią nadano nową numerację.",nrCurrentIndex+1));
 }
 
 void MainWindow2::showEditorBoard()
@@ -478,7 +511,7 @@ void MainWindow2::showEditorBoard()
     repaint();
 }
 
-void MainWindow2::on_pushButton_clicked()   //clicked "zapisz"
+void MainWindow2::on_pushButton_clicked()   //clicked "dodaj do zestawu"
 {
     if (counterHole!=counterDiamond || counterSteve==0 || counterHole==0 || counterDiamond==0 || counterDiamondWithoutHole==0)
     {
@@ -489,43 +522,37 @@ void MainWindow2::on_pushButton_clicked()   //clicked "zapisz"
     // ---------- clear all levels of comboBox and add all -------
     ui->comboBox->clear();
     unsigned short int levels;
-    for (levels=0; levels<dynamicLevelsMenu.size();levels++)
+    for (levels=0; levels<dynamicLevelsMenu;levels++)
     {
-        ui->comboBox->addItem(dynamicLevelsMenu[levels]);
+        ui->comboBox->addItem(mySprintf("Level %d %c", levels+1, dynamicLevelsMenuStar[levels]));
     }
     if (nrCurrentIndex==-1)
     {
         // ---------- add new level -----------------------
         ui->comboBox->addItem(mySprintf("Level %d",levels+1));
-        dynamicLevelsMenu.push_back(mySprintf("Level %d",levels+1));
+        dynamicLevelsMenu=levels+1;
+        dynamicLevelsMenuStar.push_back(' ');
         ui->comboBox->setCurrentIndex(levels);
 
         // ------- saving the current board to memory -----
         saveLoadBoard.addNewBoard(myEditorBoard.getBoardToVector());
-        ui->menuPlik->setTitle(mySprintf("new counter=%d",saveLoadBoard.getCounterLevels()));
     }
     else
     {
         ui->comboBox->setCurrentIndex(nrCurrentIndex);
-        dynamicLevelsMenu[nrCurrentIndex]=mySprintf("Level %d",nrCurrentIndex+1);     //Level x *  -> Level x
+//        dynamicLevelsMenu[nrCurrentIndex]=nrCurrentIndex+1;     //Level x *  -> Level x
+        dynamicLevelsMenuStar[nrCurrentIndex]=' ';
         ui->comboBox->setItemText(nrCurrentIndex,mySprintf("Level %d",nrCurrentIndex+1));
         // ------- saving the current board to memory -----
         saveLoadBoard.addBoard(myEditorBoard.getBoardToVector(),nrCurrentIndex);
-        ui->menuPlik->setTitle(mySprintf("add currentIndex=%d, counter=%d",nrCurrentIndex,saveLoadBoard.getCounterLevels()));
     }
     QMessageBox::about(this, "Udało się!", mySprintf("Plansza [Level %d] została zaktualizowana!",ui->comboBox->currentIndex()+1));
 }
 
 void MainWindow2::on_pushButton_2_clicked()     //clicked +nowa
 {
-    //    if (counterHole!=counterDiamond || counterSteve==0 || counterHole==0 || counterDiamond==0 || counterDiamondWithoutHole==0)
-    //    {
-    //        QMessageBox::critical(this, "Nie można dodać nowej planszy!", "Musisz zapisać aktualną planszę by móc dodać nową (naciśnij -> zapis)." );
-    //        return;
-    //    }
-
     // ---------- clear all levels of comboBox and add all -------
-    unsigned short int tmpSize = dynamicLevelsMenu.size();
+    unsigned short int tmpSize = dynamicLevelsMenu;
     if (tmpSize>=120)
     {
         QMessageBox::critical(this, "Nie można dodać planszy!", "Maksymalnie może być 120 plansz w jednym pliku." );
@@ -535,21 +562,20 @@ void MainWindow2::on_pushButton_2_clicked()     //clicked +nowa
     ui->comboBox->clear();
     for (levels=0; levels<tmpSize;levels++)
     {
-        ui->comboBox->addItem(dynamicLevelsMenu[levels]);
+        ui->comboBox->addItem(mySprintf("Level %d %c", levels+1, dynamicLevelsMenuStar[levels]));
     }
     ui->comboBox->addItem(mySprintf("Level %d *",levels+1));
-    dynamicLevelsMenu.push_back(mySprintf("Level %d *",levels+1));
+    dynamicLevelsMenu=levels+1;
+    dynamicLevelsMenuStar.push_back('*');
     ui->comboBox->setCurrentIndex(levels);
     // ------- saving the current board to memory -----
-    saveLoadBoard.addNewBoard();                            //add empty board (without argument)
+    saveLoadBoard.addNewBoard();                                  //add empty board (without argument)
     //    myEditorBoard.load(saveLoadBoard.getBoard(levels));     //refresh board
     //    showEditorBoard();                                      //show new/empty board
-    ui->menuPlik->setTitle(mySprintf("newEmpty counter=%d",saveLoadBoard.getCounterLevels()));
 }
 
 void MainWindow2::on_comboBox_activated(int index)
 {
-    ui->menuPlik->setTitle(mySprintf("wybrano index=%d",index));
     myEditorBoard.load(saveLoadBoard.getBoard(index));
     showEditorBoard();
 }

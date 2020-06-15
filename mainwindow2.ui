@@ -155,7 +155,7 @@
   </action>
   <action name="actionUsu_aktualn_plansz">
    <property name="text">
-    <string>Usuń aktualną planszę</string>
+    <string>Usuń aktualną planszę z zestawu</string>
    </property>
   </action>
  </widget>

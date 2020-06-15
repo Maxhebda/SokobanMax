@@ -8,6 +8,7 @@ public:
     SaveLoadBoard();
     QVector<unsigned short int> getBoard(unsigned short int index);         //13*15 elements
     void addBoard(QVector<unsigned short int>,unsigned short int index);    //add active board to allTheBoard to index
+    void deleteBoard(unsigned short int index);
     void addNewBoard(QVector<unsigned short int>);                          //add active board to allTheBoard to the end
     void addNewBoard();                                                     //add empty  board to allTheBoard to the end
     unsigned short int getCounterLevels();                                  //counter levels in memory (in allTheBoards)
