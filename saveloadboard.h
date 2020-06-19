@@ -13,6 +13,7 @@ public:
     void addNewBoard();                                                     //add empty  board to allTheBoard to the end
     unsigned short int getCounterLevels();                                  //counter levels in memory (in allTheBoards)
     bool isEmpty();                                                         //true if all is "*"
+    void getBoardToTable(unsigned short int index, unsigned short int (&table)[13][15]);
 
     //------- name dynamic board container --------------
     unsigned short int dynamicLevelsMenu;

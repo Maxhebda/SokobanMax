@@ -10,6 +10,7 @@
 #include <QVector>
 #include <QAction>
 #include <saveloadboard.h>
+# include <QFileDialog>
 
 namespace Ui {
 class MainWindow2;

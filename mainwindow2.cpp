@@ -396,7 +396,18 @@ void MainWindow2::clickSaveFile()
         return;
     }
 
-
+    QString filePath = QFileDialog::getSaveFileName(this, "Zapisz plik z planszami", "/home/sokoban/plansza.sbm","Plik SokobanMax (*.sbm)");
+    if (filePath!=NULL)
+    {
+        if (saveLoadBoard.saveToFile(filePath)!=0)
+        {
+            QMessageBox::critical(this, "Nie zapisano!", "Podczas zapisu wystąpił błąd!");
+        }
+        else
+        {
+            QMessageBox::about(this, "Zestaw zapisany!", "Poprawnie zapisano zestaw plansz do pliku.");
+        }
+    }
 }
 
 void MainWindow2::showEditorBoard()
@@ -588,7 +599,7 @@ void MainWindow2::on_pushButton_2_clicked()     //clicked +nowa
 
 void MainWindow2::on_comboBox_activated(int index)
 {
-    // ---------- clear all levels of comboBox and add all -------
+    // --- Refresh : clear all levels of comboBox and add all ----
     unsigned short int levels;
     unsigned short int tmpSize = saveLoadBoard.dynamicLevelsMenu;
     ui->comboBox->clear();

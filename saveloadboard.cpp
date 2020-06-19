@@ -89,8 +89,31 @@ void SaveLoadBoard::deleteBoard(unsigned short int index)
     allTheBoards.remove(index*13*15,13*15);
 }
 
+void SaveLoadBoard::getBoardToTable(unsigned short index, unsigned short (&table)[13][15])
+{
+    for (unsigned short int y=0; y<13; y++)
+    {
+        for (unsigned short int x=0; x<15; x++)
+        {
+            table[y][x]=allTheBoards[index*13*15 + y*15+x];
+        }
+    }
+}
+
 unsigned short int SaveLoadBoard::saveToFile(QString fileName)
 {
+    unsigned short int table[13][15];
+    FILE * fIn = fopen(fileName.toStdString().c_str(),"w");     //open file to save
+    for (unsigned short int i=0; i<counterLevels ; i++)
+    {
+        if (dynamicLevelsMenuStar[i]!='*')                      //save only full boards
+        {
+            //---- save level/index in table ----
+            getBoardToTable(i,table);
+            fwrite(&table,sizeof(table),1,fIn);                 //save to file (all full boards)
+        }
+    }
+           fclose(fIn);
     return 0;
 }
 
