@@ -390,7 +390,11 @@ void MainWindow2::clickDeleteActiveBoard()
 
 void MainWindow2::clickSaveFile()
 {
-
+    if (saveLoadBoard.getCounterLevels()==0)
+    {
+        QMessageBox::about(this, "Nie zapisano!", "Brak dodanych plansz w zestawie.");
+        return;
+    }
 }
 
 void MainWindow2::showEditorBoard()

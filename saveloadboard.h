@@ -16,9 +16,11 @@ public:
     //------- name dynamic board container --------------
     unsigned short int dynamicLevelsMenu;
     QVector <char>     dynamicLevelsMenuStar;    // ? "*"
+
+    unsigned short int saveToFile(QString fileName);                        //0=ok, nr = error
 private:
     QVector<unsigned short int> allTheBoards;                               //MEMORY  13*15 elements * x levels
-    unsigned short int counterLevels; 
+    unsigned short int counterLevels;
 };
 
 #endif // SAVELOADBOARD_H

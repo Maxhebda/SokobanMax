@@ -88,3 +88,8 @@ void SaveLoadBoard::deleteBoard(unsigned short int index)
     counterLevels--;
     allTheBoards.remove(index*13*15,13*15);
 }
+
+unsigned short int SaveLoadBoard::saveToFile(QString fileName)
+{
+    return 0;
+}
