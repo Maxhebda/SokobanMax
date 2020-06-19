@@ -8,8 +8,8 @@ MainWindow2::MainWindow2(QWidget *parent) :
     ui(new Ui::MainWindow2)
 {
     ui->setupUi(this);
-    dynamicLevelsMenu=0;  // zero dynamic board container
-    dynamicLevelsMenuStar.clear();
+    saveLoadBoard.dynamicLevelsMenu=0;              // zero dynamic board container
+    saveLoadBoard.dynamicLevelsMenuStar.clear();    // = clear
     // --------------------------- basic bacgroud --------------------
     image = new QImage(15*48+16,13*48+14+60,QImage::Format_RGB32);   // 15 (+16) x 13 (+14 +60)
     image->fill(QColor(180,180,170));
@@ -23,6 +23,7 @@ MainWindow2::MainWindow2(QWidget *parent) :
     connect(ui->actionPusty_rodek,SIGNAL(triggered()),this,SLOT(clickFillEmptyCenter()));
     connect(ui->actionMa_a_pusta_ramka,SIGNAL(triggered()),this,SLOT(clickFillSmallEmptyFrame()));
     connect(ui->actionUsu_aktualn_plansz,SIGNAL(triggered()),this,SLOT(clickDeleteActiveBoard()));
+    connect(ui->actionZapisz_plik_z_planszami,SIGNAL(triggered()),this,SLOT(clickSaveFile()));
 
     //-------------------- reset counter elements at board ------------
     counterHole = 0;
@@ -367,15 +368,15 @@ void MainWindow2::clickDeleteActiveBoard()
     saveLoadBoard.deleteBoard(nrCurrentIndex);
 
     // ---- removing the name "level x+1 from the comboBox -------
-    dynamicLevelsMenu--;
-    dynamicLevelsMenuStar.remove(nrCurrentIndex);
+    saveLoadBoard.dynamicLevelsMenu--;
+    saveLoadBoard.dynamicLevelsMenuStar.remove(nrCurrentIndex); //delete
 
     // ---------- clear all levels of comboBox and add all -------
     ui->comboBox->clear();
     unsigned short int levels;
-    for (levels=0; levels<dynamicLevelsMenu;levels++)
+    for (levels=0; levels<saveLoadBoard.dynamicLevelsMenu;levels++)
     {
-        ui->comboBox->addItem(mySprintf("Level %d %c",levels+1,dynamicLevelsMenuStar[levels]));
+        ui->comboBox->addItem(mySprintf("Level %d %c",levels+1,saveLoadBoard.dynamicLevelsMenuStar[levels]));
     }
 
     //    if (ui->comboBox->count()>0)
@@ -385,6 +386,11 @@ void MainWindow2::clickDeleteActiveBoard()
     myEditorBoard.load(saveLoadBoard.getBoard(0));
     showEditorBoard();
     QMessageBox::about(this, "Usunięto planszę!", mySprintf("Plansza [Level %d] została usunięta z zestawu!\nPlanszom znajdującym się za nią nadano nową numerację.",nrCurrentIndex+1));
+}
+
+void MainWindow2::clickSaveFile()
+{
+
 }
 
 void MainWindow2::showEditorBoard()
@@ -522,16 +528,16 @@ void MainWindow2::on_pushButton_clicked()   //clicked "dodaj do zestawu"
     // ---------- clear all levels of comboBox and add all -------
     ui->comboBox->clear();
     unsigned short int levels;
-    for (levels=0; levels<dynamicLevelsMenu;levels++)
+    for (levels=0; levels<saveLoadBoard.dynamicLevelsMenu;levels++)
     {
-        ui->comboBox->addItem(mySprintf("Level %d %c", levels+1, dynamicLevelsMenuStar[levels]));
+        ui->comboBox->addItem(mySprintf("Level %d %c", levels+1, saveLoadBoard.dynamicLevelsMenuStar[levels]));
     }
     if (nrCurrentIndex==-1)
     {
         // ---------- add new level -----------------------
         ui->comboBox->addItem(mySprintf("Level %d",levels+1));
-        dynamicLevelsMenu=levels+1;
-        dynamicLevelsMenuStar.push_back(' ');
+        saveLoadBoard.dynamicLevelsMenu=levels+1;
+        saveLoadBoard.dynamicLevelsMenuStar.push_back(' ');
         ui->comboBox->setCurrentIndex(levels);
 
         // ------- saving the current board to memory -----
@@ -541,7 +547,7 @@ void MainWindow2::on_pushButton_clicked()   //clicked "dodaj do zestawu"
     {
         ui->comboBox->setCurrentIndex(nrCurrentIndex);
 //        dynamicLevelsMenu[nrCurrentIndex]=nrCurrentIndex+1;     //Level x *  -> Level x
-        dynamicLevelsMenuStar[nrCurrentIndex]=' ';
+        saveLoadBoard.dynamicLevelsMenuStar[nrCurrentIndex]=' ';
         ui->comboBox->setItemText(nrCurrentIndex,mySprintf("Level %d",nrCurrentIndex+1));
         // ------- saving the current board to memory -----
         saveLoadBoard.addBoard(myEditorBoard.getBoardToVector(),nrCurrentIndex);
@@ -552,7 +558,7 @@ void MainWindow2::on_pushButton_clicked()   //clicked "dodaj do zestawu"
 void MainWindow2::on_pushButton_2_clicked()     //clicked +nowa
 {
     // ---------- clear all levels of comboBox and add all -------
-    unsigned short int tmpSize = dynamicLevelsMenu;
+    unsigned short int tmpSize = saveLoadBoard.dynamicLevelsMenu;
     if (tmpSize>=120)
     {
         QMessageBox::critical(this, "Nie można dodać planszy!", "Maksymalnie może być 120 plansz w jednym pliku." );
@@ -562,11 +568,11 @@ void MainWindow2::on_pushButton_2_clicked()     //clicked +nowa
     ui->comboBox->clear();
     for (levels=0; levels<tmpSize;levels++)
     {
-        ui->comboBox->addItem(mySprintf("Level %d %c", levels+1, dynamicLevelsMenuStar[levels]));
+        ui->comboBox->addItem(mySprintf("Level %d %c", levels+1, saveLoadBoard.dynamicLevelsMenuStar[levels]));
     }
     ui->comboBox->addItem(mySprintf("Level %d *",levels+1));
-    dynamicLevelsMenu=levels+1;
-    dynamicLevelsMenuStar.push_back('*');
+    saveLoadBoard.dynamicLevelsMenu=levels+1;
+    saveLoadBoard.dynamicLevelsMenuStar.push_back('*');
     ui->comboBox->setCurrentIndex(levels);
     // ------- saving the current board to memory -----
     saveLoadBoard.addNewBoard();                                  //add empty board (without argument)

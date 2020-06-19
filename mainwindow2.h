@@ -33,11 +33,6 @@ private:
     void getXboardClick(short int & x, short int & y, unsigned short int xInForm, unsigned short int yInForm);// x=0-14, y=0-12 -1=npClick
     short int selectedMenu;
 
-
-    //------- name dynamic board container --------------
-    unsigned short int dynamicLevelsMenu;
-    QVector <char>     dynamicLevelsMenuStar;    // ? "*"
-
     //----------- class storing all boards --------------
     SaveLoadBoard saveLoadBoard;
 
@@ -63,6 +58,7 @@ private slots:
     void clickFillEmptyCenter();
     void clickFillSmallEmptyFrame();
     void clickDeleteActiveBoard();
+    void clickSaveFile();
     // form
     void on_pushButton_clicked();           //clicked "dodaj do zestawu"
     void on_pushButton_2_clicked();         //clicked +nowa
