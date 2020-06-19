@@ -12,6 +12,7 @@ public:
     void addNewBoard(QVector<unsigned short int>);                          //add active board to allTheBoard to the end
     void addNewBoard();                                                     //add empty  board to allTheBoard to the end
     unsigned short int getCounterLevels();                                  //counter levels in memory (in allTheBoards)
+    bool isEmpty();                                                         //true if all is "*"
 
     //------- name dynamic board container --------------
     unsigned short int dynamicLevelsMenu;

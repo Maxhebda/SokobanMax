@@ -93,3 +93,18 @@ unsigned short int SaveLoadBoard::saveToFile(QString fileName)
 {
     return 0;
 }
+
+bool SaveLoadBoard::isEmpty()
+{
+    bool tmp = true;
+    if (counterLevels==0) return true;
+    for(auto iter=dynamicLevelsMenuStar.begin();iter!=dynamicLevelsMenuStar.end();iter++)
+    {
+        if (*iter!='*')
+        {
+            tmp=false;
+            break;
+        }
+    }
+    return tmp;
+}

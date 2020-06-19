@@ -390,11 +390,13 @@ void MainWindow2::clickDeleteActiveBoard()
 
 void MainWindow2::clickSaveFile()
 {
-    if (saveLoadBoard.getCounterLevels()==0)
+    if (saveLoadBoard.isEmpty())
     {
         QMessageBox::about(this, "Nie zapisano!", "Brak dodanych plansz w zestawie.");
         return;
     }
+
+
 }
 
 void MainWindow2::showEditorBoard()
@@ -550,7 +552,7 @@ void MainWindow2::on_pushButton_clicked()   //clicked "dodaj do zestawu"
     else
     {
         ui->comboBox->setCurrentIndex(nrCurrentIndex);
-//        dynamicLevelsMenu[nrCurrentIndex]=nrCurrentIndex+1;     //Level x *  -> Level x
+        //        dynamicLevelsMenu[nrCurrentIndex]=nrCurrentIndex+1;     //Level x *  -> Level x
         saveLoadBoard.dynamicLevelsMenuStar[nrCurrentIndex]=' ';
         ui->comboBox->setItemText(nrCurrentIndex,mySprintf("Level %d",nrCurrentIndex+1));
         // ------- saving the current board to memory -----
@@ -561,7 +563,6 @@ void MainWindow2::on_pushButton_clicked()   //clicked "dodaj do zestawu"
 
 void MainWindow2::on_pushButton_2_clicked()     //clicked +nowa
 {
-    // ---------- clear all levels of comboBox and add all -------
     unsigned short int tmpSize = saveLoadBoard.dynamicLevelsMenu;
     if (tmpSize>=120)
     {
@@ -569,6 +570,7 @@ void MainWindow2::on_pushButton_2_clicked()     //clicked +nowa
         return;
     }
     unsigned short int levels;
+    // ---------- clear all levels of comboBox and add all -------
     ui->comboBox->clear();
     for (levels=0; levels<tmpSize;levels++)
     {
@@ -586,6 +588,16 @@ void MainWindow2::on_pushButton_2_clicked()     //clicked +nowa
 
 void MainWindow2::on_comboBox_activated(int index)
 {
+    // ---------- clear all levels of comboBox and add all -------
+    unsigned short int levels;
+    unsigned short int tmpSize = saveLoadBoard.dynamicLevelsMenu;
+    ui->comboBox->clear();
+    for (levels=0; levels<tmpSize;levels++)
+    {
+        ui->comboBox->addItem(mySprintf("Level %d %c", levels+1, saveLoadBoard.dynamicLevelsMenuStar[levels]));
+    }
+
+    ui->comboBox->setCurrentIndex(index);
     myEditorBoard.load(saveLoadBoard.getBoard(index));
     showEditorBoard();
 }
