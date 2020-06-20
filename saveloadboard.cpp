@@ -103,28 +103,47 @@ void SaveLoadBoard::getBoardToTable(unsigned short index, char (&table)[13][15])
 unsigned short int SaveLoadBoard::saveToFile(QString fileName)
 {
     char table[13][15];
-    FILE * fIn = fopen(fileName.toStdString().c_str(),"w");     //open file to save
+    FILE * fileWrite = fopen(fileName.toStdString().c_str(),"wb");     //open file to save binary
     for (unsigned short int i=0; i<counterLevels ; i++)
     {
-        if (dynamicLevelsMenuStar[i]!='*')                      //save only full boards
+        if (dynamicLevelsMenuStar[i]!='*')                             //save only full boards
         {
             //---- save level/index in table ----
             getBoardToTable(i,table);
-            fwrite(&table,sizeof(table),1,fIn);                 //save to file (all full boards)
+            fwrite(&table,sizeof(table),1,fileWrite);                 //save to file (all full boards)
         }
     }
-    fclose(fIn);
+    fclose(fileWrite);
     return 0;
 }
 
 unsigned short int SaveLoadBoard::openFromFile(QString fileName)
 {
     // -- clear all data --
-    allTheBoards.clear();
-    counterLevels=0;
-    dynamicLevelsMenu=0;
-    dynamicLevelsMenuStar.clear();
-
+    //    allTheBoards.clear();
+    //    counterLevels=0;
+    //    dynamicLevelsMenu=0;
+    //    dynamicLevelsMenuStar.clear();
+    unsigned short int tempCounter=0;
+    QVector<char> tempBoards;
+    unsigned short int i;
+    tempBoards.clear();
+    // -- read from file --
+    char table[13*15];
+    FILE * fileRead = fopen(fileName.toStdString().c_str(),"rb");     //open file to read binary
+    while (fread(&table,1,13*15,fileRead)==13*15)
+    {
+        tempCounter++;
+        for (i=0;i<13*15;i++)
+        {
+            tempBoards.push_back(table[i]);
+        }
+    }
+    fclose(fileRead);
+    if (tempCounter==0)
+        return 1; // = error
+    // ---------------- updating the board database ------------------
+    // ---------------- updating the board database ------------------
     return 0;
 }
 

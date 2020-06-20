@@ -234,7 +234,6 @@ void MainWindow2::myMouseClick(QMouseEvent *event)
         {
             int nrCurrentIndex = ui->comboBox->currentIndex();
             ui->comboBox->setItemText(nrCurrentIndex,mySprintf("Level %d *",nrCurrentIndex+1));
-            //            dynamicLevelsMenu[nrCurrentIndex]=mySprintf("Level %d *",nrCurrentIndex+1);
         }
     }
     showEditorBoard();
@@ -285,18 +284,36 @@ void MainWindow2::getXboardClick(short int & x, short int & y, unsigned short in
 
 void MainWindow2::clickFillWall()
 {
+    int nrCurrentIndex = ui->comboBox->currentIndex();
+    if (nrCurrentIndex!=-1)
+    {
+        int nrCurrentIndex = ui->comboBox->currentIndex();
+        ui->comboBox->setItemText(nrCurrentIndex,mySprintf("Level %d *",nrCurrentIndex+1));
+    }
     myEditorBoard.clearToWall();
     showEditorBoard();
 }
 
 void MainWindow2::clickFillEmpty()
 {
+    int nrCurrentIndex = ui->comboBox->currentIndex();
+    if (nrCurrentIndex!=-1)
+    {
+        int nrCurrentIndex = ui->comboBox->currentIndex();
+        ui->comboBox->setItemText(nrCurrentIndex,mySprintf("Level %d *",nrCurrentIndex+1));
+    }
     myEditorBoard.clear();
     showEditorBoard();
 }
 
 void MainWindow2::clickFillEmptyFrame()
 {
+    int nrCurrentIndex = ui->comboBox->currentIndex();
+    if (nrCurrentIndex!=-1)
+    {
+        int nrCurrentIndex = ui->comboBox->currentIndex();
+        ui->comboBox->setItemText(nrCurrentIndex,mySprintf("Level %d *",nrCurrentIndex+1));
+    }
     myEditorBoard.clear();
     for (unsigned short int y=0; y<13; y++)
     {
@@ -317,6 +334,12 @@ void MainWindow2::clickFillEmptyFrame()
 
 void MainWindow2::clickFillEmptyCenter()
 {
+    int nrCurrentIndex = ui->comboBox->currentIndex();
+    if (nrCurrentIndex!=-1)
+    {
+        int nrCurrentIndex = ui->comboBox->currentIndex();
+        ui->comboBox->setItemText(nrCurrentIndex,mySprintf("Level %d *",nrCurrentIndex+1));
+    }
     myEditorBoard.clear();
     for (unsigned short int y=0; y<13; y++)
     {
@@ -338,6 +361,12 @@ void MainWindow2::clickFillEmptyCenter()
 
 void MainWindow2::clickFillSmallEmptyFrame()
 {
+    int nrCurrentIndex = ui->comboBox->currentIndex();
+    if (nrCurrentIndex!=-1)
+    {
+        int nrCurrentIndex = ui->comboBox->currentIndex();
+        ui->comboBox->setItemText(nrCurrentIndex,mySprintf("Level %d *",nrCurrentIndex+1));
+    }
     myEditorBoard.clear();
     for (unsigned short int y=0; y<13; y++)
     {
@@ -429,15 +458,17 @@ void MainWindow2::clickOpenFile()
                 return;
             }
             // --- read file ---
-            if (saveLoadBoard.openFromFile(filePath))
+            unsigned short int errorCode=saveLoadBoard.openFromFile(filePath);
+            if (errorCode!=0)
             {
-                QMessageBox::critical(this, "Błąd odczytu!", "Podczas odczytu pliku z planszami wystąpił błąd!");
+//                QMessageBox::critical(this, "Błąd odczytu!", "Podczas odczytu pliku z planszami wystąpił błąd!");
+                QMessageBox::critical(this,mySprintf("%d",errorCode),"aaa");
             }
             else
             {
                 QMessageBox::about(this, "Zestaw odczytany!", "Plik z planszami załadowano poprawnie!");
-                myEditorBoard.clear();
-                showEditorBoard();
+//                myEditorBoard.clear();
+//                showEditorBoard();
             }
             break;
         }
