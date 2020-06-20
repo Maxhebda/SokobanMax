@@ -60,6 +60,7 @@ private slots:
     void clickFillSmallEmptyFrame();
     void clickDeleteActiveBoard();
     void clickSaveFile();
+    void clickOpenFile();
     // form
     void on_pushButton_clicked();           //clicked "dodaj do zestawu"
     void on_pushButton_2_clicked();         //clicked +nowa

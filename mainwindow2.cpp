@@ -24,6 +24,7 @@ MainWindow2::MainWindow2(QWidget *parent) :
     connect(ui->actionMa_a_pusta_ramka,SIGNAL(triggered()),this,SLOT(clickFillSmallEmptyFrame()));
     connect(ui->actionUsu_aktualn_plansz,SIGNAL(triggered()),this,SLOT(clickDeleteActiveBoard()));
     connect(ui->actionZapisz_plik_z_planszami,SIGNAL(triggered()),this,SLOT(clickSaveFile()));
+    connect(ui->actionOtw_rz_plik_z_planszami,SIGNAL(triggered()),this,SLOT(clickOpenFile()));
 
     //-------------------- reset counter elements at board ------------
     counterHole = 0;
@@ -410,6 +411,39 @@ void MainWindow2::clickSaveFile()
     }
 }
 
+void MainWindow2::clickOpenFile()
+{
+    QMessageBox msg;
+    msg.setText("Otwierasz nowy plik więc Twoja aktualna praca w edytorze plansz zostanie utracona!");
+    msg.setInformativeText("Czy na pewno chcesz otworzyć nowy plik?");
+    msg.setStandardButtons(QMessageBox::Open | QMessageBox::Cancel);
+    msg.setDefaultButton(QMessageBox::Cancel);
+    int ret = msg.exec();
+    switch (ret)
+    {
+        case QMessageBox::Open :
+        {
+            QString filePath = QFileDialog::getOpenFileName(this, "Otwórz plik z planszami", "/home/sokoban/plansza","Plik SokobanMax (*.sbm)");
+            if (filePath==NULL)
+            {
+                return;
+            }
+            // --- read file ---
+            if (saveLoadBoard.openFromFile(filePath))
+            {
+                QMessageBox::critical(this, "Błąd odczytu!", "Podczas odczytu pliku z planszami wystąpił błąd!");
+            }
+            else
+            {
+                QMessageBox::about(this, "Zestaw odczytany!", "Plik z planszami załadowano poprawnie!");
+                myEditorBoard.clear();
+                showEditorBoard();
+            }
+            break;
+        }
+    }
+}
+
 void MainWindow2::showEditorBoard()
 {
     const unsigned short int position_board=60;
@@ -469,65 +503,65 @@ void MainWindow2::showEditorBoard()
         for (unsigned short int x=0; x<15; x++)
         {
             switch (myEditorBoard.get(y,x)) {
-            case OneCell::CELL_EMPTY:
-            {
-                break;
-            }
-            case OneCell::CELL_WALL:
-            {
-                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/wall.png"),source);
-                break;
-            }
-            case OneCell::CELL_DOOR:
-            {
-                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/door.png"),source);
-                break;
-            }
-            case OneCell::CELL_STEVE:
-            {
-                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/steve.png"),source);
-                break;
-            }
-            case OneCell::CELL_HOLE:
-            {
-                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/hole.png"),source);
-                break;
-            }
-            case OneCell::CELL_DIAMOND:
-            {
-                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/diamond.png"),source);
-                break;
-            }
-            case OneCell::CELL_DIAMONDinHOLE:
-            {
-                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/diamondHole.png"),source);
-                break;
-            }
-            case OneCell::CELL_STEVEinHOLE:
-            {
-                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/steveHole.png"),source);
-                break;
-            }
-            case OneCell::CELL_ARROW_UP:
-            {
-                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/arrowUp.png"),source);
-                break;
-            }
-            case OneCell::CELL_ARROW_DOWN:
-            {
-                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/arrowDown.png"),source);
-                break;
-            }
-            case OneCell::CELL_ARROW_LEFT:
-            {
-                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/arrowLeft.png"),source);
-                break;
-            }
-            case OneCell::CELL_ARROW_RIGHT:
-            {
-                paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/arrorRight.png"),source);
-                break;
-            }
+                case OneCell::CELL_EMPTY:
+                {
+                    break;
+                }
+                case OneCell::CELL_WALL:
+                {
+                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/wall.png"),source);
+                    break;
+                }
+                case OneCell::CELL_DOOR:
+                {
+                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/door.png"),source);
+                    break;
+                }
+                case OneCell::CELL_STEVE:
+                {
+                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/steve.png"),source);
+                    break;
+                }
+                case OneCell::CELL_HOLE:
+                {
+                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/hole.png"),source);
+                    break;
+                }
+                case OneCell::CELL_DIAMOND:
+                {
+                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/diamond.png"),source);
+                    break;
+                }
+                case OneCell::CELL_DIAMONDinHOLE:
+                {
+                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/diamondHole.png"),source);
+                    break;
+                }
+                case OneCell::CELL_STEVEinHOLE:
+                {
+                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/steveHole.png"),source);
+                    break;
+                }
+                case OneCell::CELL_ARROW_UP:
+                {
+                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/arrowUp.png"),source);
+                    break;
+                }
+                case OneCell::CELL_ARROW_DOWN:
+                {
+                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/arrowDown.png"),source);
+                    break;
+                }
+                case OneCell::CELL_ARROW_LEFT:
+                {
+                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/arrowLeft.png"),source);
+                    break;
+                }
+                case OneCell::CELL_ARROW_RIGHT:
+                {
+                    paintOnImage->drawImage(QRectF(x*49+1,y*49+1+position_board,48,48),QImage(":/img/arrorRight.png"),source);
+                    break;
+                }
             }
         }
     }

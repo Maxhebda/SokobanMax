@@ -117,6 +117,17 @@ unsigned short int SaveLoadBoard::saveToFile(QString fileName)
     return 0;
 }
 
+unsigned short int SaveLoadBoard::openFromFile(QString fileName)
+{
+    // -- clear all data --
+    allTheBoards.clear();
+    counterLevels=0;
+    dynamicLevelsMenu=0;
+    dynamicLevelsMenuStar.clear();
+
+    return 0;
+}
+
 bool SaveLoadBoard::isEmpty()
 {
     bool tmp = true;

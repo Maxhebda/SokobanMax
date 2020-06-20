@@ -20,6 +20,7 @@ public:
     QVector <char>     dynamicLevelsMenuStar;    // ? "*"
 
     unsigned short int saveToFile(QString fileName);                        //0=ok, nr = error
+    unsigned short int openFromFile(QString fileName);                      //0=ok, nr = error
 private:
     QVector<unsigned short int> allTheBoards;                               //MEMORY  13*15 elements * x levels
     unsigned short int counterLevels;
