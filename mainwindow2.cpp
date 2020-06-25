@@ -452,7 +452,7 @@ void MainWindow2::clickOpenFile()
     {
         case QMessageBox::Open :
         {
-            QString filePath = QFileDialog::getOpenFileName(this, "Otwórz plik z planszami", "/home/sokoban/plansza","Plik SokobanMax (*.sbm)");
+            QString filePath = QFileDialog::getOpenFileName(this, "Otwórz plik z planszami", "/home/sokoban/plansza.sbm","Plik SokobanMax (*.sbm)");
             if (filePath==NULL)
             {
                 return;
@@ -461,14 +461,26 @@ void MainWindow2::clickOpenFile()
             unsigned short int errorCode=saveLoadBoard.openFromFile(filePath);
             if (errorCode!=0)
             {
-//                QMessageBox::critical(this, "Błąd odczytu!", "Podczas odczytu pliku z planszami wystąpił błąd!");
-                QMessageBox::critical(this,mySprintf("%d",errorCode),"aaa");
+                switch (errorCode) {
+                    case 1 : QMessageBox::critical(this, "Błąd odczytu!", "Plik nie zawiera plansz SokobanMax lub jest uszkodzony!");break;
+                    case 2 : QMessageBox::critical(this, "Błąd odczytu!", "Podczas odczytu pliku z planszami wystąpił błąd!");break;
+                }
             }
             else
             {
+                myEditorBoard.clear();
+                saveLoadBoard.dynamicLevelsMenu = saveLoadBoard.getCounterLevels();
+                saveLoadBoard.dynamicLevelsMenuStar.clear();
+                ui->comboBox->clear();
+                for (unsigned short int i=0;i<saveLoadBoard.getCounterLevels();i++)
+                {
+                    ui->comboBox->addItem(mySprintf("Level %d", i+1));
+                    saveLoadBoard.dynamicLevelsMenuStar.push_back(' ');
+                }
+                myEditorBoard.load(saveLoadBoard.getBoard(0));  //display the first board
+                showEditorBoard();
+                ui->comboBox->setCurrentIndex(0);               //active first level in comboBox
                 QMessageBox::about(this, "Zestaw odczytany!", "Plik z planszami załadowano poprawnie!");
-//                myEditorBoard.clear();
-//                showEditorBoard();
             }
             break;
         }

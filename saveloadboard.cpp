@@ -117,12 +117,17 @@ bool SaveLoadBoard::boardIsGood(char (&table)[13*15])
             switch (table[i]) {
                 case OneCell::CELL_HOLE : counterHole++;break;
                 case OneCell::CELL_STEVE : counterSteve++;break;
+                case OneCell::CELL_STEVEinHOLE : counterSteve++;break;
                 case OneCell::CELL_DIAMOND : {counterDiamond++; counterDiamondWithoutHole++;} break;
                 case OneCell::CELL_DIAMONDinHOLE : {counterHole++; counterDiamond++;} break;
                 case OneCell::CELL_ARROW_UP : counterArrow++;break;
                 case OneCell::CELL_ARROW_DOWN : counterArrow++;break;
                 case OneCell::CELL_ARROW_RIGHT : counterArrow++;break;
                 case OneCell::CELL_ARROW_LEFT : counterArrow++;break;
+                case OneCell::CELL_DOOR : break;
+                case OneCell::CELL_WALL : break;
+                case OneCell::CELL_EMPTY: break;
+                default: return false;
             }
     }
     if (counterSteve!=1 || counterArrow>1 || counterHole<1 || counterDiamond!=counterHole || counterDiamondWithoutHole==0)
@@ -174,6 +179,7 @@ unsigned short int SaveLoadBoard::openFromFile(QString fileName)
     fclose(fileRead);
     if (tempCounter==0)
         return 1; // = error
+
     // ---------------- updating the board database ------------------
     for (unsigned short int c=0;c<tempCounter;c++)
     {
@@ -183,6 +189,21 @@ unsigned short int SaveLoadBoard::openFromFile(QString fileName)
         }
         if (SaveLoadBoard::boardIsGood(table)==false)
             return 2; // error
+    }
+
+    // --- clear all ---
+    clearAll(); //clear board and couter board
+
+    // --- add new board ---
+    QVector<unsigned short int> tempOneBoard;
+    for (unsigned short int c=0;c<tempCounter;c++)
+    {
+        tempOneBoard.clear();
+        for (unsigned short int t=0;t<13*15;t++)
+        {
+            tempOneBoard.push_back(tempBoards[c*13*15+t]);
+        }
+        addNewBoard(tempOneBoard);
     }
     // ---------------- updating the board database ------------------
     return 0;
