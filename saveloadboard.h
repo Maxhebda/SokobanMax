@@ -1,11 +1,14 @@
 #ifndef SAVELOADBOARD_H
 #define SAVELOADBOARD_H
 #include <QVector>
+#include <onecell.h>
 
 class SaveLoadBoard
 {
 public:
     SaveLoadBoard();
+    void clearAll();
+    static bool boardIsGood(char (&table)[13*15]);                         //I check if the board is correct
     QVector<unsigned short int> getBoard(unsigned short int index);         //13*15 elements
     void addBoard(QVector<unsigned short int>,unsigned short int index);    //add active board to allTheBoard to index
     void deleteBoard(unsigned short int index);

@@ -2,6 +2,11 @@
 
 SaveLoadBoard::SaveLoadBoard()
 {
+    clearAll();
+}
+
+void SaveLoadBoard::clearAll()
+{
     allTheBoards.clear();
     counterLevels=0;
 }
@@ -100,6 +105,33 @@ void SaveLoadBoard::getBoardToTable(unsigned short index, char (&table)[13][15])
     }
 }
 
+bool SaveLoadBoard::boardIsGood(char (&table)[13*15])
+{
+    char counterSteve=0;
+    char counterDiamond=0;
+    char counterHole=0;
+    char counterDiamondWithoutHole=0;
+    char counterArrow=0;
+    for (unsigned short int i=0; i<13*15; i++)
+    {
+            switch (table[i]) {
+                case OneCell::CELL_HOLE : counterHole++;break;
+                case OneCell::CELL_STEVE : counterSteve++;break;
+                case OneCell::CELL_DIAMOND : {counterDiamond++; counterDiamondWithoutHole++;} break;
+                case OneCell::CELL_DIAMONDinHOLE : {counterHole++; counterDiamond++;} break;
+                case OneCell::CELL_ARROW_UP : counterArrow++;break;
+                case OneCell::CELL_ARROW_DOWN : counterArrow++;break;
+                case OneCell::CELL_ARROW_RIGHT : counterArrow++;break;
+                case OneCell::CELL_ARROW_LEFT : counterArrow++;break;
+            }
+    }
+    if (counterSteve!=1 || counterArrow>1 || counterHole<1 || counterDiamond!=counterHole || counterDiamondWithoutHole==0)
+    {
+        return false;
+    }
+    return true;
+}
+
 unsigned short int SaveLoadBoard::saveToFile(QString fileName)
 {
     char table[13][15];
@@ -143,6 +175,15 @@ unsigned short int SaveLoadBoard::openFromFile(QString fileName)
     if (tempCounter==0)
         return 1; // = error
     // ---------------- updating the board database ------------------
+    for (unsigned short int c=0;c<tempCounter;c++)
+    {
+        for (unsigned short int t=0;t<13*15;t++)
+        {
+            table[t]=tempBoards[c*13*15+t];
+        }
+        if (SaveLoadBoard::boardIsGood(table)==false)
+            return 2; // error
+    }
     // ---------------- updating the board database ------------------
     return 0;
 }
