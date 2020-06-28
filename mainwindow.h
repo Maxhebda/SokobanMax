@@ -39,7 +39,9 @@ private:
     QShortcut * shLEFT;
     QShortcut * shSPACE;
 
+    char WhatBoardsToLoad;   // 0 = basic levels for menu, 1 = levels for file
     unsigned short int numberOfLevel;
+    unsigned short int numberoflevelFromFile;
     static const unsigned short int LEVEL_BASIC=8;                     //number of levels
     QAction * levelBasicAction[LEVEL_BASIC];
 
