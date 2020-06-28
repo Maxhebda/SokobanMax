@@ -117,7 +117,7 @@ bool SaveLoadBoard::boardIsGood(char (&table)[13*15])
             switch (table[i]) {
                 case OneCell::CELL_HOLE : counterHole++;break;
                 case OneCell::CELL_STEVE : counterSteve++;break;
-                case OneCell::CELL_STEVEinHOLE : counterSteve++;break;
+                case OneCell::CELL_STEVEinHOLE : counterSteve++;counterHole++;break;
                 case OneCell::CELL_DIAMOND : {counterDiamond++; counterDiamondWithoutHole++;} break;
                 case OneCell::CELL_DIAMONDinHOLE : {counterHole++; counterDiamond++;} break;
                 case OneCell::CELL_ARROW_UP : counterArrow++;break;
