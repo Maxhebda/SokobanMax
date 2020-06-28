@@ -44,6 +44,7 @@ private:
     char WhatBoardsToLoad;   // 0 = basic levels for menu, 1 = levels for file
 
     // --- levels from file ---
+    unsigned short int numberOfLevelFromFile;
     QVector <QAction *> levelFromFileAction;
     SaveLoadBoard levelsFromFile; //all boards from file
 

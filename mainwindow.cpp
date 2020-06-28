@@ -27,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionZa_aduj_z_pliku,SIGNAL(triggered()),this, SLOT(clickLoadFromFile()));
 
     WhatBoardsToLoad = 0; //load levels for menu "podstawowe plansze"
+    numberOfLevelFromFile =0;
+    numberOfLevel=0;
     addMenuLevel();
     showBoard();
 }
@@ -49,7 +51,7 @@ void MainWindow::addMenuLevel()
     char tmp[8];
     for (unsigned short int i=0;i<LEVEL_BASIC;i++)
     {
-        sprintf(tmp,"Level %d",i);
+        sprintf(tmp,"Level %d",i+1);
         levelBasicAction[i] = new QAction(tmp,this);
         levelBasicAction[i]->setCheckable(true);
         sprintf(tmp,"%d",i);
@@ -64,20 +66,25 @@ void MainWindow::addMenuLevel()
 
 void MainWindow::addMenuLevelFromFile()
 {
+    levelFromFileAction.clear();
+    ui->menuZ_pliku->clear();
     char tmp[8];
     for (unsigned short int i=0;i<levelsFromFile.getCounterLevels();i++)
     {
-        sprintf(tmp,"Level %d",i);
+        sprintf(tmp,"Level %d",i+1);
         QAction * leveltemp = new QAction(tmp,this);
+        leveltemp->setCheckable(true);
         sprintf(tmp,"%d",i);
         leveltemp->setObjectName(tmp);
-        ui->menuZ_pliku->addAction(leveltemp);
-        connect(leveltemp,SIGNAL(triggered()),this,SLOT(clickLevelFromFile()));
-
+        levelFromFileAction.push_back(leveltemp);
     }
-    //    levelBasicAction[0]->setChecked(true);  //selected first level
-    //    numberOfLevel=0;
-    //    myBoard.load(Levels::basicLevel(numberOfLevel));
+    for (unsigned short int i=0;i<levelsFromFile.getCounterLevels();i++)
+    {
+        ui->menuZ_pliku->addAction(levelFromFileAction[i]);
+        connect(levelFromFileAction[i],SIGNAL(triggered()),this,SLOT(clickLevelFromFile()));
+    }
+    levelFromFileAction[0]->setChecked(true);//selected first level
+    numberOfLevelFromFile=0;
 }
 
 void MainWindow::paintEvent(QPaintEvent *e)
@@ -172,6 +179,15 @@ void MainWindow::showBoard()
 
 void MainWindow::clickLevelBasic()
 {
+    // clear all checked basic levels menu
+    for (unsigned short int i=0;i<levelsFromFile.getCounterLevels();i++)
+    {
+        levelFromFileAction[i]->blockSignals(true);
+        levelFromFileAction[i]->setChecked(false);
+        levelFromFileAction[i]->blockSignals(false);
+    }
+
+    WhatBoardsToLoad = 0;
     numberOfLevel = QVariant(((QAction*)sender())->objectName()).toInt();
     myBoard.load(Levels::basicLevel(numberOfLevel));
 
@@ -191,8 +207,18 @@ void MainWindow::clickLevelBasic()
 
 void MainWindow::clickStart()
 {
-    myBoard.load(Levels::basicLevel(numberOfLevel));
-    showBoard();
+    switch (WhatBoardsToLoad) {
+        case 0 :
+        {
+            myBoard.load(Levels::basicLevel(numberOfLevel));
+            showBoard();
+        }
+        case 1 :
+        {
+            myBoard.load(levelsFromFile.getBoard(numberOfLevelFromFile));
+            showBoard();
+        }
+    }
 }
 
 void MainWindow::clickBoardsEditor()
@@ -421,7 +447,7 @@ void MainWindow::clickRIGHT()
 void MainWindow::clickSPACE()
 {
     if (!myBoard.isWin()) return;
-    if (WhatBoardsToLoad==0)
+    if (WhatBoardsToLoad==0)                                //levels basic from menu
     {
         if (numberOfLevel<LEVEL_BASIC-1) numberOfLevel++;
         // checked only active levels
@@ -432,6 +458,17 @@ void MainWindow::clickSPACE()
         levelBasicAction[numberOfLevel]->setChecked(true);
 
         myBoard.load(Levels::basicLevel(numberOfLevel));
+    }
+    if (WhatBoardsToLoad==1)                                //levels from file
+    {
+        if (numberOfLevelFromFile<levelsFromFile.getCounterLevels()-1) numberOfLevelFromFile++;
+        // checked only active levels
+        for (unsigned short int i=0;i<levelsFromFile.getCounterLevels();i++)
+        {
+            levelFromFileAction[i]->setChecked(false);
+        }
+        levelFromFileAction[numberOfLevelFromFile]->setChecked(true);
+        myBoard.load(levelsFromFile.getBoard(numberOfLevelFromFile));
     }
     showBoard();
 }
@@ -461,10 +498,41 @@ void MainWindow::clickLoadFromFile()
         QMessageBox::about(this, "Zestaw odczytany!", "Plik z planszami załadowano poprawnie!");
         ui->menuZ_pliku->setEnabled(true);
         addMenuLevelFromFile();
+
+        // clear all checked basic levels menu
+        for (unsigned short int i=0;i<LEVEL_BASIC;i++)
+        {
+            levelBasicAction[i]->blockSignals(true);
+            levelBasicAction[i]->setChecked(false);
+            levelBasicAction[i]->blockSignals(false);
+        }
     }
 }
 
 void MainWindow::clickLevelFromFile()
 {
+    // clear all checked basic levels menu
+    for (unsigned short int i=0;i<LEVEL_BASIC;i++)
+    {
+        levelBasicAction[i]->blockSignals(true);
+        levelBasicAction[i]->setChecked(false);
+        levelBasicAction[i]->blockSignals(false);
+    }
 
+    WhatBoardsToLoad = 1;
+    numberOfLevelFromFile = QVariant(((QAction*)sender())->objectName()).toInt();
+    myBoard.load(levelsFromFile.getBoard(numberOfLevelFromFile));
+
+    // checked only active levels
+    for (unsigned short int i=0;i<levelsFromFile.getCounterLevels();i++)
+    {
+        levelFromFileAction[i]->blockSignals(true);
+        levelFromFileAction[i]->setChecked(false);
+        levelFromFileAction[i]->blockSignals(false);
+    }
+    levelFromFileAction[numberOfLevelFromFile]->blockSignals(true);
+    levelFromFileAction[numberOfLevelFromFile]->setChecked(true);
+    levelFromFileAction[numberOfLevelFromFile]->blockSignals(false);
+
+    showBoard();
 }
