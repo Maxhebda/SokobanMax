@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     // ------------------------ connect menu -------------------------
     connect(ui->actionStart,SIGNAL(triggered()),this,SLOT(clickStart()));
     connect(ui->actionEdytor_Plansz,SIGNAL(triggered()),this,SLOT(clickBoardsEditor()));
+    connect(ui->actionZa_aduj_z_pliku,SIGNAL(triggered()),this, SLOT(clickLoadFromFile()));
 
     WhatBoardsToLoad = 0; //load levels for menu "podstawowe plansze"
     addMenuLevel();
@@ -59,6 +60,24 @@ void MainWindow::addMenuLevel()
     levelBasicAction[0]->setChecked(true);  //selected first level
     numberOfLevel=0;
     myBoard.load(Levels::basicLevel(numberOfLevel));
+}
+
+void MainWindow::addMenuLevelFromFile()
+{
+    char tmp[8];
+    for (unsigned short int i=0;i<levelsFromFile.getCounterLevels();i++)
+    {
+        sprintf(tmp,"Level %d",i);
+        QAction * leveltemp = new QAction(tmp,this);
+        sprintf(tmp,"%d",i);
+        leveltemp->setObjectName(tmp);
+        ui->menuZ_pliku->addAction(leveltemp);
+        connect(leveltemp,SIGNAL(triggered()),this,SLOT(clickLevelFromFile()));
+
+    }
+    //    levelBasicAction[0]->setChecked(true);  //selected first level
+    //    numberOfLevel=0;
+    //    myBoard.load(Levels::basicLevel(numberOfLevel));
 }
 
 void MainWindow::paintEvent(QPaintEvent *e)
@@ -405,14 +424,47 @@ void MainWindow::clickSPACE()
     if (WhatBoardsToLoad==0)
     {
         if (numberOfLevel<LEVEL_BASIC-1) numberOfLevel++;
-    }
-    // checked only active levels
-    for (unsigned short int i=0;i<LEVEL_BASIC;i++)
-    {
-        levelBasicAction[i]->setChecked(false);
-    }
-    levelBasicAction[numberOfLevel]->setChecked(true);
+        // checked only active levels
+        for (unsigned short int i=0;i<LEVEL_BASIC;i++)
+        {
+            levelBasicAction[i]->setChecked(false);
+        }
+        levelBasicAction[numberOfLevel]->setChecked(true);
 
-    myBoard.load(Levels::basicLevel(numberOfLevel));
+        myBoard.load(Levels::basicLevel(numberOfLevel));
+    }
     showBoard();
+}
+
+void MainWindow::clickLoadFromFile()
+{
+    QString filePath = QFileDialog::getOpenFileName(this, "Otwórz plik z planszami", "/home/sokoban/plansza.sbm","Plik SokobanMax (*.sbm)");
+    if (filePath==NULL)
+    {
+        return;
+    }
+    // --- read file ---
+    unsigned short int errorCode=levelsFromFile.openFromFile(filePath);
+    if (errorCode!=0)
+    {
+        switch (errorCode) {
+            case 1 : QMessageBox::critical(this, "Błąd odczytu!", "Plik nie zawiera plansz SokobanMax lub jest uszkodzony!");break;
+            case 2 : QMessageBox::critical(this, "Błąd odczytu!", "Podczas odczytu pliku z planszami wystąpił błąd!");break;
+        }
+    }
+    else
+    {
+        WhatBoardsToLoad=1;
+        myBoard.clear();
+        myBoard.load(levelsFromFile.getBoard(0));  //display the first board
+        showBoard();                               //active first level in comboBox
+        QMessageBox::about(this, "Zestaw odczytany!", "Plik z planszami załadowano poprawnie!");
+        ui->menuZ_pliku->setEnabled(true);
+        addMenuLevelFromFile();
+    }
+}
+
+void MainWindow::clickLevelFromFile()
+{
+
 }

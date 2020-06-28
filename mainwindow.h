@@ -10,6 +10,7 @@
 #include <QShortcut>
 #include <levels.h>
 #include <mainwindow2.h>
+#include <saveloadboard.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,7 +24,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void showBoard();
-    void addMenuLevel();
+    void addMenuLevel();                //create menu from basic levels
+    void addMenuLevelFromFile();        //create menu from file
 
 private:
     Ui::MainWindow *ui;
@@ -40,8 +42,13 @@ private:
     QShortcut * shSPACE;
 
     char WhatBoardsToLoad;   // 0 = basic levels for menu, 1 = levels for file
+
+    // --- levels from file ---
+    QVector <QAction *> levelFromFileAction;
+    SaveLoadBoard levelsFromFile; //all boards from file
+
+    // --- levels basics menu ---
     unsigned short int numberOfLevel;
-    unsigned short int numberoflevelFromFile;
     static const unsigned short int LEVEL_BASIC=8;                     //number of levels
     QAction * levelBasicAction[LEVEL_BASIC];
 
@@ -53,6 +60,8 @@ private slots:
     void clickStart();
     void clickLevelBasic();
     void clickBoardsEditor();
+    void clickLoadFromFile();   //click "załaduj z pliku"
+    void clickLevelFromFile();  //click level1..  in "z pliku"
     //---- shortcut
     void clickUP();
     void clickDOWN();
