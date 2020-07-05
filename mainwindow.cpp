@@ -37,6 +37,13 @@ MainWindow::~MainWindow()
 {
     delete ui;
     paintOnImage->end();
+
+    delete shUP;
+    delete shDOWN;
+    delete shRIGHT;
+    delete shLEFT;
+    delete shSPACE;
+
     delete image;
     delete paintOnImage;
     for (unsigned short int i=0;i<LEVEL_BASIC;i++)
