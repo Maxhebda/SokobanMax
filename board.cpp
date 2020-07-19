@@ -41,6 +41,7 @@ void Board::clearToWall()
 
 void Board::load(QVector<unsigned short int> level)
 {
+
     pos_Teleport_x=-1;
     pos_Teleport_y=-1;
     pos_Teleport_x_next=-1;

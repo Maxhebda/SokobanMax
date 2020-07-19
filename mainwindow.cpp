@@ -218,14 +218,15 @@ void MainWindow::clickStart()
         case 0 :
         {
             myBoard.load(Levels::basicLevel(numberOfLevel));
-            showBoard();
+            break;
         }
         case 1 :
         {
             myBoard.load(levelsFromFile.getBoard(numberOfLevelFromFile));
-            showBoard();
+            break;
         }
     }
+    showBoard();
 }
 
 void MainWindow::clickBoardsEditor()

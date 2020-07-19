@@ -41,7 +41,7 @@ private:
     QShortcut * shLEFT;
     QShortcut * shSPACE;
 
-    char WhatBoardsToLoad;   // 0 = basic levels for menu, 1 = levels for file
+    uint8_t WhatBoardsToLoad;   // 0 = basic levels for menu, 1 = levels for file
 
     // --- levels from file ---
     unsigned short int numberOfLevelFromFile;
