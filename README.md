@@ -4,8 +4,7 @@ Gra planszowa polegająca na przesuwaniu diamentów do dziur
 * dodano edytor plansz
 * dodano możliwość zapisu i odczytu własnych plansz
 
-# Screen programu :
-gra: 
+## Screen okna głównego :
 ![SokobanMax - Maksymilian Hebda](./projectScreenImage/SokobanMax1.png)
-edytor :
+## Screen Edytora plansz :
 ![SokobanMax - Maksymilian Hebda](./projectScreenImage/SokobanMax2.png)
