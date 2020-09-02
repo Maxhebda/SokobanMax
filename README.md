@@ -1,5 +1,5 @@
 # SokobanMax
-<img src="./projectScreenImage/SaperJoker2.png" width=300/>
+<img src="./projectScreenImage/SokobanMax1.png" width=300/>
 
 A board game where you move diamonds into holes
 * added teleportation - door
@@ -13,4 +13,4 @@ Gra planszowa polegająca na przesuwaniu diamentów do dziur
 * dodano możliwość zapisu i odczytu własnych plansz
 
 ## Screen board editor :
-<img src="./projectScreenImage/SaperJoker2.png" width=300/>
+<img src="./projectScreenImage/SokobanMax2.png" width=300/>
